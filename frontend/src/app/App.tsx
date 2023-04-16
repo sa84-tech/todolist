@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { Navbar } from '@/widgets/Navbar';
+import { AppRouter } from './providers/Router';
 
 function App() {
-    const [count, setCount] = useState(0);
-
-    return <div className='App'>API: {__API__}</div>;
+    return (
+        <div className='app'>
+            <Navbar />
+            <AppRouter />
+        </div>
+    );
 }
 
 export default App;
