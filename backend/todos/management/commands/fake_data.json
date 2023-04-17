@@ -96,7 +96,7 @@
       "data": {
         "title": "Odomtempor exercitation incididunt",
         "details": "Occaecat quis culpa quis exercitation id. Consectetur non velit labore enim adipisicing proident exercitation excepteur sint. Ipsum minim aliqua labore esse nulla fugiat reprehenderit eiusmod.",
-        "preview_image": "https://github.com/cooley/kate",
+        "preview_image": "https://source.unsplash.com/720x400/?javascript",
         "is_active": true,
         "is_completed": true
       },
@@ -163,7 +163,7 @@
       "data": {
         "title": "Averylaboris proident consectetur",
         "details": "Nisi amet pariatur ea amet esse consequat enim qui dolore ex aute labore ea. Laboris dolore nisi ea exercitation do exercitation aute id veniam enim. Fugiat velit culpa elit enim tempor velit voluptate tempor velit amet.",
-        "preview_image": "https://source.unsplash.com/720x400/?javascript",
+        "preview_image": "https://source.unsplash.com/720x400/?postgresql",
         "is_active": true,
         "is_completed": true
       },

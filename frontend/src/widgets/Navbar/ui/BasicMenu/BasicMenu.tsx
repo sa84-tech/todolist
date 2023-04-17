@@ -1,24 +1,8 @@
+import { User } from '@/entities/User';
 import AppAvatar from '@/shared/ui/AppAvatar/AppAvatar';
-import {
-    Box,
-    IconButton,
-    Menu,
-    MenuItem,
-    Typography,
-} from '@mui/material';
+import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
-// FOR TEST
-interface User {
-    id: number;
-    username: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    isStaff: boolean;
-    isSuperuser: boolean;
-}
 
 export const BasicMenu = (props: { user: User }) => {
     const { user } = props;
@@ -34,16 +18,13 @@ export const BasicMenu = (props: { user: User }) => {
 
     return (
         <Box sx={{ flexGrow: 0 }}>
-            <IconButton id='basic-button' onClick={handleOpenUserMenu}>
-                <AppAvatar
-                    firstName={user.firstName}
-                    lastName={user.lastName}
-                />
+            <IconButton id="basic-button" onClick={handleOpenUserMenu}>
+                <AppAvatar firstName={user.firstName} lastName={user.lastName} />
             </IconButton>
 
             <Menu
                 sx={{ mt: '45px' }}
-                id='menu-appbar'
+                id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
                     vertical: 'top',
@@ -57,18 +38,22 @@ export const BasicMenu = (props: { user: User }) => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
             >
-                <MenuItem onClick={handleCloseUserMenu} disabled>
-                    <Typography textAlign='center'>Профиль</Typography>
+                <MenuItem
+                    component={Link}
+                    to="/profile"
+                    onClick={handleCloseUserMenu}
+                >
+                    <Typography textAlign="center">Профиль</Typography>
                 </MenuItem>
                 <MenuItem
                     component={Link}
-                    to='/users'
+                    to="/admin"
                     onClick={handleCloseUserMenu}
                 >
-                    <Typography textAlign='center'>Пользователи</Typography>
+                    <Typography textAlign="center">Админка</Typography>
                 </MenuItem>
-                <MenuItem>
-                    <Typography textAlign='center'>Выход</Typography>
+                <MenuItem disabled>
+                    <Typography textAlign="center">Выход</Typography>
                 </MenuItem>
             </Menu>
         </Box>

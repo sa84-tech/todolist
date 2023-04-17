@@ -1,7 +1,9 @@
 import { AppLink } from '@/shared/ui/AppLink/AppLink';
-import { AppBar, Box, Container, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Container, Toolbar } from '@mui/material';
 import { BasicMenu } from '../BasicMenu/BasicMenu';
-import LetterT from '@/shared/assets/letterT.svg';
+import ToDo from '@/shared/assets/todo_sm.svg';
+import { useSelector } from 'react-redux';
+import { getUserAuthData } from '@/entities/User';
 
 // FOR TEST
 const testUser = {
@@ -15,44 +17,36 @@ const testUser = {
 };
 
 export const Navbar = () => {
+    const user = useSelector(getUserAuthData);
+
+    if (!user) {
+        return null;
+    }
+
     return (
         <AppBar
-            position='static'
-            color='default'
+            position="static"
+            color="default"
             elevation={0}
             sx={{
                 borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
             }}
         >
-            <Container maxWidth='xl'>
+            <Container maxWidth="xl">
                 <Toolbar sx={{ justifyContent: 'left' }}>
-                    <Typography
-                        variant='h4'
-                        component='a'
-                        href='/'
-                        noWrap
-                        sx={{
-                            mr: 3,
-                            display: 'flex',
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.2rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        <LetterT />
-                    </Typography>
-                    <Box sx={{ flexGrow: 1 }}>
-                        <AppLink sx={{ mr: 2 }} to='/'>
+                    <AppLink to='/'>
+                        <ToDo />
+                    </AppLink>
+                    <Box ml={4} sx={{ flexGrow: 1 }}>
+                        <AppLink sx={{ mr: 2 }} to="/">
                             Главная
                         </AppLink>
-                        <AppLink sx={{ mr: 2 }} to='/test'>
+                        <AppLink sx={{ mr: 2 }} to="/test">
                             Тест
                         </AppLink>
                     </Box>
 
-                    <BasicMenu user={testUser} />
+                    <BasicMenu user={user} />
                 </Toolbar>
             </Container>
         </AppBar>

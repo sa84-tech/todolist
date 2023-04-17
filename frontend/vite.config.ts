@@ -5,8 +5,8 @@ import svgr from 'vite-plugin-svgr';
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
+        svgr({ exportAsDefault: true }),
         react(),
-        svgr({ exportAsDefault: true })
     ],
     define: {
         __API__: JSON.stringify('http://localhost:8000'),
