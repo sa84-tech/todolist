@@ -1,3 +1,4 @@
+import { Todo } from "@/entities/Todo";
 import { User } from "@/entities/User";
 
 export interface Todolist {
@@ -9,5 +10,5 @@ export interface Todolist {
     isActive: boolean;
     createdAt: string;
     participants: User[]
-    todo: [];
+    todo: Todo[];
 }
