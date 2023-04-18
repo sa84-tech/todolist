@@ -30,8 +30,8 @@ export const EditableTodolistCard = memo((props: EditableTodolistCardProps) => {
     return (
             <Grid
                 className={`${cls.EditableTodolistCard} ${className}`}
-                justifyContent="space-between"
-                container={true}
+                xs={12} md={7} sx={{ pr: 3 }} 
+                justifyContent='end'
                 item={true}
             >
                 <TodolistCard 

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { EditableTodoCardSchema } from '../types/editableTodoCardSchema';
+import { EditableTodoCardSchema, formStateType } from '../types/EditableTodoCardSchema';
 import { Todo } from '@/entities/Todo';
 
 const initialState: EditableTodoCardSchema = {
-    readonly: true,
+    formState: 'default',
     isLoading: false,
     error: undefined,
     data: undefined,
@@ -13,11 +13,11 @@ export const editableTodoCardSlice = createSlice({
     name: 'editableTodoCard',
     initialState,
     reducers: {
-        setReadonly: (state, action: PayloadAction<boolean>) => {
-            state.readonly = action.payload;
+        setFormState: (state, action: PayloadAction<formStateType>) => {
+            state.formState = action.payload;
         },
         cancelEdit: (state) => {
-            state.readonly = true;
+            state.formState = 'default';
             state.form = state.data;
         },
         updateTodo: (state, action: PayloadAction<Todo>) => {

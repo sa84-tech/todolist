@@ -44,11 +44,11 @@ export const EditableTodolistCardControls = memo((props: EditableTodolistCardCon
                 </>
             ) : (
                 <>
-                    <Button variant="outlined" onClick={onSave} size="small" sx={{ m: 1 }}>
-                        Сохранить
-                    </Button>
                     <Button variant="outlined" onClick={onCancelEdit} size="small" sx={{ m: 1 }}>
                         Отменить
+                    </Button>
+                    <Button variant="outlined" color='success' onClick={onSave} size="small" sx={{ m: 1 }}>
+                        Сохранить
                     </Button>
                 </>
             )}

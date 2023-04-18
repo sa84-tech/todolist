@@ -45,7 +45,7 @@ export const TodoCard = memo((props: TodoCardProps) => {
     }
 
     return (
-        <Grid item xs={12} md={5} sx={{ pl: 3 }}>
+        <>
             <Typography variant="h6" component="h2">
                 Задача
             </Typography>
@@ -64,6 +64,6 @@ export const TodoCard = memo((props: TodoCardProps) => {
                 <strong>Статус: </strong>
                 {data?.isCompleted ? 'Выполнена' : 'В работе'}
             </Typography>
-        </Grid>
+        </>
     );
 });

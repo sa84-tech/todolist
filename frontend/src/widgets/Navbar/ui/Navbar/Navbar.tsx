@@ -5,17 +5,6 @@ import ToDo from '@/shared/assets/todo_sm.svg';
 import { useSelector } from 'react-redux';
 import { getUserAuthData } from '@/entities/User';
 
-// FOR TEST
-const testUser = {
-    id: 1,
-    username: 'admin',
-    email: 'admin@example.com',
-    firstName: 'Александр',
-    lastName: 'Матросов',
-    isStaff: true,
-    isSuperuser: true,
-};
-
 export const Navbar = () => {
     const user = useSelector(getUserAuthData);
 
@@ -27,17 +16,14 @@ export const Navbar = () => {
         <AppBar
             position="static"
             color="default"
-            elevation={0}
-            sx={{
-                borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-            }}
+            elevation={1}
         >
             <Container maxWidth="xl">
-                <Toolbar sx={{ justifyContent: 'left' }}>
+                <Toolbar disableGutters={true} sx={{ justifyContent: 'left' }}>
                     <AppLink to='/'>
                         <ToDo />
                     </AppLink>
-                    <Box ml={4} sx={{ flexGrow: 1 }}>
+                    <Box ml={5} sx={{ flexGrow: 1 }}>
                         <AppLink sx={{ mr: 2 }} to="/">
                             Главная
                         </AppLink>

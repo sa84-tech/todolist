@@ -39,23 +39,23 @@ export const TodolistCard = memo((props: TodolistCardProps) => {
 
     if (error) {
         return (
-            <Grid item xs={12} md={7} sx={{ pr: 3 }} justifyContent="end">
+            <>
                 <Typography variant="h2" component="h5" sx={{ my: 2 }}>
                     <strong>Произошла ошибка при загрузки данных проекта.</strong>
                 </Typography>
                 <Typography variant="h3" component="h5" sx={{ my: 2 }}>
                     Попробуйте обновить страницу.
                 </Typography>
-            </Grid>
+            </>
         );
     }
 
     return (
-        <Grid item xs={12} md={7} sx={{ pr: 3 }} justifyContent="end">
+        <>
             <Typography variant="h4" sx={{ mt: 2 }}>
                 <strong>Проект:</strong> {data?.title}
             </Typography>
-            <Typography variant="body1" sx={{ mt: 2 }}>
+            <Typography variant="body1" sx={{ mt: 4 }}>
                 <strong>Описание:</strong> {data?.details}
             </Typography>
             <Typography variant="body1" sx={{ mt: 2 }}>
@@ -69,6 +69,6 @@ export const TodolistCard = memo((props: TodolistCardProps) => {
             <Typography variant="body1" sx={{ mt: 3 }}>
                 <strong>Команда:</strong> {getUsersString(data?.participants)}
             </Typography>
-        </Grid>
+        </>
     );
 });
