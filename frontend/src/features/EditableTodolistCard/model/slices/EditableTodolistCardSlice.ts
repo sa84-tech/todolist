@@ -1,33 +1,65 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { EditableTodolistCardSchema } from '../types/EditableTodolistCardSchema';
+import { EditableTodolistCardSchema } from '../types/editableTodolistCardSchema';
+import { Todolist } from '@/entities/Todolist';
+import { fetchTodolistData } from '../services/fetchTodolistData/fetchTodolistData';
+import { updateTodolistData } from '../services/updateTodolistData/updateTodolistData';
 
 const initialState: EditableTodolistCardSchema = {
-    
+    readonly: true,
+    isLoading: false,
+    error: undefined,
+    data: undefined,
 };
 
-export const EditableTodolistCardSlice = createSlice({
-    name: 'EditableTodolistCard',
+export const editableTodolistCardSlice = createSlice({
+    name: 'editableTodolistCard',
     initialState,
     reducers: {
-        template: (state, action: PayloadAction<string>) => {
-           
+        setReadonly: (state, action: PayloadAction<boolean>) => {
+            state.readonly = action.payload;
+        },
+        cancelEdit: (state) => {
+            state.readonly = true;
+            state.form = state.data;
+        },
+        updateTodolist: (state, action: PayloadAction<Todolist>) => {
+            state.form = {
+                ...state.form,
+                ...action.payload,
+            };
         },
     },
-    // extraReducers: (builder) => {
-    //     builder
-    //         .addCase(, (state) => {
-    //             state.error = undefined;
-    //             state.isLoading = true;
-    //         })
-    //         .addCase(, (state) => {
-    //             state.isLoading = false;
-    //         })
-    //         .addCase(, (state, action) => {
-    //             state.isLoading = false;
-    //             state.error = action.payload;
-    //         });
-    // },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchTodolistData.pending, (state) => {
+                state.error = undefined;
+                state.isLoading = true;
+            })
+            .addCase(fetchTodolistData.fulfilled, (state, action: PayloadAction<Todolist>) => {
+                state.isLoading = false;
+                state.data = action.payload;
+                state.form = action.payload;
+            })
+            .addCase(fetchTodolistData.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            .addCase(updateTodolistData.pending, (state) => {
+                state.error = undefined;
+                state.isLoading = true;
+            })
+            .addCase(updateTodolistData.fulfilled, (state, action: PayloadAction<Todolist>) => {
+                state.isLoading = false;
+                state.data = action.payload;
+                state.form = action.payload;
+                state.readonly = true;
+            })
+            .addCase(updateTodolistData.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            });
+    },
 });
 
-export const { actions: EditableTodolistCardActions } = EditableTodolistCardSlice;
-export const { reducer: EditableTodolistCardReducer } = EditableTodolistCardSlice;
+export const { actions: editableTodolistCardActions } = editableTodolistCardSlice;
+export const { reducer: editableTodolistCardReducer } = editableTodolistCardSlice;

@@ -3,12 +3,14 @@ import { StateSchema } from './StateSchema';
 import { counterReducer } from '@/entities/Counter';
 import { userReducer } from '@/entities/User';
 import { todolistsPageReducer } from '@/pages/TodolistsPage/model/slices/todolistsPageSlice';
+import { editableTodolistCardReducer } from '@/features/EditableTodolistCard/model/slices/editableTodolistCardSlice';
 
 export function createReduxStore(initialState?: StateSchema) {
     const rootReducers: ReducersMapObject<StateSchema> = {
         user: userReducer,
         counter: counterReducer,
         todolistsPage: todolistsPageReducer,
+        todolistDetails: editableTodolistCardReducer,
     };
 
     return configureStore<StateSchema>({
