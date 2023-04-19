@@ -14,6 +14,4 @@ export interface TodolistsPageSchema extends EntityState<Todolist> {
     previous: string,
     // filters
     search: string;
-
-    _inited: boolean;
 }

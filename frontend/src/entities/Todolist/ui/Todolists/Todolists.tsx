@@ -18,18 +18,26 @@ export const Todolists = memo((props: TodolistProps) => {
         </Grid>
     );
 
-    if (!isLoading && !todolists.length) {
-        return (
-            <div className={className}>
-                <Typography variant="h2" component="h5" sx={{ my: 2 }}>
-                    <strong>Список пустой</strong>
-                </Typography>
-            </div>
-        );
-    }
+    // if (isLoading) {
+    //     return (
+    //         <Grid container className={className}>
+    //             <CircularProgress />
+    //         </Grid>
+    //     );
+    // }
+
+    // if (!isLoading && !todolists.length) {
+    //     return (
+    //         <Grid container className={className}>
+    //             <Typography variant="h2" component="h5" sx={{ my: 2 }}>
+    //                 <strong>Список пустой</strong>
+    //             </Typography>
+    //         </Grid>
+    //     );
+    // }
 
     return (
-        <Grid container className={className}>
+        <Grid container className={className} spacing={3}>
             {todolists.length > 0 ? todolists.map(renderListItem) : null}
             {isLoading && <CircularProgress />}
         </Grid>

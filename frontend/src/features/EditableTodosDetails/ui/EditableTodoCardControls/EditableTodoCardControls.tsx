@@ -3,8 +3,8 @@ import AlertDialog from '@/shared/ui/AlertDialog/AlertDialog';
 import { Button, Grid } from '@mui/material';
 import { memo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { editableTodoCardActions } from '../../model/slices/editableTodoCardSlice';
-import { getTodoCardformState } from '../../model/selectors/editableTodoCardSelectors';
+import { editableTodosDetailsActions } from '../../model/slices/editableTodosDetailsSlice';
+import { getTodosDetailsformState } from '../../model/selectors/editableTodoCardSelectors';
 
 interface EditableTodoCardControlsProps {
     className?: string;
@@ -15,21 +15,21 @@ export const EditableTodoCardControls = memo(
         const { className } = props;
 
         const dispatch = useAppDispatch();
-        const formState = useSelector(getTodoCardformState);
+        const formState = useSelector(getTodosDetailsformState);
 
         const onCreate = useCallback(() => {
-            dispatch(editableTodoCardActions.setFormState('create'));
+            dispatch(editableTodosDetailsActions.setFormState('create'));
         }, [dispatch]);
 
         const onEdit = useCallback(() => {
-            dispatch(editableTodoCardActions.setFormState('edit'));
+            dispatch(editableTodosDetailsActions.setFormState('edit'));
         }, [dispatch]);
 
         const onSave = useCallback(() => {
             if (formState === 'create') {
                 console.log("🚀 ~ file: EditableTodolistCardControls.tsx:30 ~ onSave ~ formState:", formState)
                 // dispatch(createTodoData());
-            } else {
+            } else if (formState === 'edit') {
                 console.log("🚀 ~ file: EditableTodolistCardControls.tsx:30 ~ onSave ~ formState:", formState)
                 // dispatch(updateTodoData());
             }
@@ -40,7 +40,7 @@ export const EditableTodoCardControls = memo(
         }, [dispatch]);
 
         const onCancelEdit = useCallback(() => {
-            dispatch(editableTodoCardActions.cancelEdit());
+            dispatch(editableTodosDetailsActions.cancelEdit());
         }, [dispatch]);
 
         return (

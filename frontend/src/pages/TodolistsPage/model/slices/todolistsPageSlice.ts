@@ -21,7 +21,6 @@ const todolistsPageSlice = createSlice({
         entities: {},
         next: '',
         previous: '',
-        _inited: false,
         total: 0,
         limit: 10,
         offset: 0,
@@ -36,9 +35,6 @@ const todolistsPageSlice = createSlice({
         },
         setSearch: (state, action: PayloadAction<string>) => {
             state.search = action.payload;
-        },
-        initState: (state) => {
-            state._inited = true;
         },
     },
     extraReducers: (builder) => {

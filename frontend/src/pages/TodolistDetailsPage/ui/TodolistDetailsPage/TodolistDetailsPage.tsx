@@ -1,12 +1,13 @@
-import { Box, Container, Grid, Typography } from '@mui/material';
-import { memo } from 'react';
-import { useParams } from 'react-router-dom';
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
+import { memo, useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import cls from './TodolistDetailsPage.module.scss';
 import { EditableTodolistCard } from '@/features/EditableTodolistCard';
 import { useSelector } from 'react-redux';
 import { getTodolistData } from '@/features/EditableTodolistCard/model/selectors/editableTodolistCardSelectors';
 import { Todos } from '@/entities/Todo';
 import { AppLink } from '@/shared/ui/AppLink/AppLink';
+import { RoutePath } from '@/shared/config/routeConfig/routeConfig';
 
 interface TodolistDetailsPageProps {
     className?: string;
@@ -15,19 +16,25 @@ interface TodolistDetailsPageProps {
 export const TodolistDetailsPage = memo((props: TodolistDetailsPageProps) => {
     const { className } = props;
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate()
 
     const todolist = useSelector(getTodolistData);
     if (!id) {
         return null;
     }
 
+    const onBackClicked = useCallback(() => {
+        navigate(RoutePath.main);
+    }, [navigate]);
+
     return (
         <Container
             className={`${cls.TodolistDetailsPage} ${className}`}
             maxWidth='xl'
-            sx={{ py: 5 }}
+            sx={{ py: 3 }}
         >
-            <Grid container justifyContent='space-between'>
+            <Button onClick={onBackClicked}>Назад</Button>
+            <Grid container pt={1} justifyContent='space-between'>
                 <EditableTodolistCard id={Number(id)} />
                 {todolist && (
                     <Grid item xs={12} md={4} sx={{ pl: 3 }}>

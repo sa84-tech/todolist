@@ -5,22 +5,25 @@ import {
     List,
     ListItem,
     ListItemAvatar,
-    ListItemText
+    ListItemButton,
+    ListItemText,
 } from '@mui/material';
-import { useCallback } from 'react';
+import { MouseEventHandler, useCallback } from 'react';
 import { Todo } from '../../model/types/TodoSchema';
 
 interface ShortenTodosProps {
     todos: Todo[];
     activeItemId?: number;
-    onItemClickHandle?: (item: Todo) => void;
+    hideDeleted?: boolean;
+    onItemClickHandle?: (id: number) => void;
 }
 
-export const ShortenTodos = ({ todos, activeItemId, onItemClickHandle }: ShortenTodosProps) => {
-    const onClick = useCallback(
-        (todo: Todo) => {
-            if (onItemClickHandle) {
-                onItemClickHandle(todo);
+export const ShortenTodos = ({ todos, activeItemId, onItemClickHandle, hideDeleted = true }: ShortenTodosProps) => {
+    const onClickHandler = useCallback(
+        (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            if (e && onItemClickHandle) {
+                const { value } = e.currentTarget.dataset;
+                onItemClickHandle(Number(value));
             }
         },
         [onItemClickHandle],
@@ -37,31 +40,23 @@ export const ShortenTodos = ({ todos, activeItemId, onItemClickHandle }: Shorten
                 '& ul': { padding: 0 },
             }}
         >
-            {todos.map((todo) => {
-                return (
-                    <Box key={todo.id}>
-                        <ListItem
-                            alignItems="flex-start"
-                            button
-                            selected={+todo.id === activeItemId}
-                            disabled={!todo.isActive}
-                        >
-                            <ListItemAvatar>
-                                <AppAvatar 
-                                    firstName={todo.executor.split(' ')[0]} 
-                                    lastName={todo.executor.split(' ')[1]}
-                                />
-                            </ListItemAvatar>
-                            <ListItemText
-                                onClick={() => onClick(todo)}
-                                primary={todo.title}
-                                secondary={todo.content}
-                            />
-                        </ListItem>
-                        <Divider variant="inset" component="li" />
-                    </Box>
-                );
-            })}
+            {todos.map((todo) => (
+                <Box key={todo.id}>
+                    <ListItemButton
+                        alignItems="flex-start"
+                        selected={+todo.id === activeItemId}
+                        disabled={!todo.isActive}
+                        onClick={onClickHandler}
+                        data-value={todo.id}
+                    >
+                        <ListItemAvatar>
+                            <AppAvatar fullName={todo.executor} />
+                        </ListItemAvatar>
+                        <ListItemText primary={todo.title} secondary={todo.content} />
+                    </ListItemButton>
+                    <Divider variant="inset" component="li" />
+                </Box>
+            ))}
         </List>
     );
 };

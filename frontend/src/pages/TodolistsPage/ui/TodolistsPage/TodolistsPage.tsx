@@ -5,10 +5,12 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { fetchTodolists } from '../../model/services/fetchTodolists/fetchTodolists';
 import { getTodolists } from '../../model/slices/todolistsPageSlice';
+import { getTodolistsPageIsLoading } from '../../model/selectors/todolistsPageSelectors';
 
 export const TodolistsPage = () => {
     const dispatch = useAppDispatch();
     const todolists = useSelector(getTodolists.selectAll);
+    const isLoading = useSelector(getTodolistsPageIsLoading);
 
     useEffect(() => {
         dispatch(fetchTodolists());
@@ -23,7 +25,7 @@ export const TodolistsPage = () => {
                     </Typography>
                 </Grid>
             </Grid>
-            <Todolists todolists={todolists} />
+            <Todolists isLoading={isLoading} todolists={todolists} />
         </Container>
     );
 };

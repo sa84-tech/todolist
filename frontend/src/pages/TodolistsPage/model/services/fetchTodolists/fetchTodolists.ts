@@ -4,7 +4,7 @@ import { $api } from '@/shared/api/api';
 import { ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
 import { Todolist } from '@/entities/Todolist';
 
-interface ServerResponse {
+interface ApiResponse {
     count: number;
     next: string;
     previous: string;
@@ -12,7 +12,7 @@ interface ServerResponse {
 }
 
 export const fetchTodolists = createAsyncThunk<
-    ServerResponse,
+ApiResponse,
     void,
     ThunkConfig<string>
     >(
@@ -23,7 +23,7 @@ export const fetchTodolists = createAsyncThunk<
             const offset = 0;
 
             try {
-                const response = await $api.get<ServerResponse>('/todos/todolist', {
+                const response = await $api.get<ApiResponse>('/todos/todolist', {
                     params: {
                         limit: limit,
                         offset: offset,
