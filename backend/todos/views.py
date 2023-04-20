@@ -47,9 +47,10 @@ class TodoViewSet(ModelViewSet):
     pagination_class = TodoLimitOffsetPagination
 
     def get_serializer_class(self):
-        if self.request.method in ['GET']:
-            return TodoSerializer
-        return TodoSerializerBase
+        return TodoSerializer
+        # if self.request.method in ['GET']:
+        #     return TodoSerializer
+        # return TodoSerializerBase
 
     def destroy(self, request, pk=None):
         todo = get_object_or_404(Todo, pk=pk)

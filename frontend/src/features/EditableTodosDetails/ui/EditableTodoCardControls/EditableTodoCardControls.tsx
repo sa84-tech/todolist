@@ -4,6 +4,7 @@ import AlertDialog from '@/shared/ui/AlertDialog/AlertDialog';
 import { Button, Grid } from '@mui/material';
 import { memo, useCallback } from 'react';
 import { editableTodosDetailsActions } from '../../model/slices/editableTodosDetailsSlice';
+import { updateTodoData } from '../../model/services/updateTodoData/updateTodoData';
 
 interface EditableTodoCardControlsProps {
     className?: string;
@@ -36,7 +37,7 @@ export const EditableTodoCardControls = memo((props: EditableTodoCardControlsPro
                 '🚀 ~ file: EditableTodolistCardControls.tsx:30 ~ onSave ~ formState:',
                 formState,
             );
-            // dispatch(updateTodoData());
+            dispatch(updateTodoData());
         }
     }, [dispatch, formState]);
 

@@ -48,7 +48,7 @@ export const TodoCard = memo((props: TodoCardProps) => {
             </Typography>
             <Typography variant="body1" sx={{ mt: 2 }}>
                 <strong>Исполнитель: </strong>
-                {data?.executor}
+                {data?.executor?.fullName}
             </Typography>
             <Typography variant="body1" sx={{ mt: 2 }}>
                 <strong>Статус: </strong>

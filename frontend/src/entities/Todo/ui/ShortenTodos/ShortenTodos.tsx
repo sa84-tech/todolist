@@ -50,7 +50,7 @@ export const ShortenTodos = ({ todos, activeItemId, onItemClickHandle, hideDelet
                         data-value={todo.id}
                     >
                         <ListItemAvatar>
-                            <AppAvatar fullName={todo.executor} />
+                            <AppAvatar fullName={todo.executor?.fullName} />
                         </ListItemAvatar>
                         <ListItemText primary={todo.title} secondary={todo.content} />
                     </ListItemButton>

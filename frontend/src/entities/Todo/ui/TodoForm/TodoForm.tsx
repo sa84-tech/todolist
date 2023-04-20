@@ -20,7 +20,7 @@ interface TodoFormProps {
     error?: string;
     onChangeTitle?: (value?: string) => void;
     onChangeContent?: (value?: string) => void;
-    onChangeExecurtor?: (value?: string) => void;
+    onChangeExecutor?: (value?: string) => void;
     onChangeIsCompleted?: (value?: boolean) => void;
 }
 
@@ -33,7 +33,7 @@ export const TodoForm = memo((props: TodoFormProps) => {
         participants,
         onChangeTitle,
         onChangeContent,
-        onChangeExecurtor,
+        onChangeExecutor,
         onChangeIsCompleted,
     } = props;
 
@@ -58,7 +58,7 @@ export const TodoForm = memo((props: TodoFormProps) => {
             const value = event.target.value || '';
             onChangeTitle?.(value);
         },
-        [onChangeTitle],
+        [onChangeTitle]
     );
 
     const onChangeContentHandler = useCallback(
@@ -66,83 +66,96 @@ export const TodoForm = memo((props: TodoFormProps) => {
             const value = event.target.value || '';
             onChangeContent?.(value);
         },
-        [onChangeContent],
+        [onChangeContent]
     );
 
     const onChangeExecurtorHandler = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
             const value = event.target.value || '';
-            onChangeExecurtor?.(value);
+            onChangeExecutor?.(value);
         },
-        [onChangeExecurtor],
+        [onChangeExecutor]
     );
 
     const onChangeIsCompletedHandler = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
             const value = event.target.value;
-            console.log("🚀 ~ file: TodoForm.tsx:83 ~ TodoForm ~ value:", value)
-            onChangeIsCompleted?.(value === 'on');
+            onChangeIsCompleted?.(value === 'true');
         },
-        [onChangeIsCompleted],
+        [onChangeIsCompleted]
     );
 
     return (
         <>
-            <Typography variant="h6" component="h2">
+            <Typography variant='h6' component='h2'>
                 Задача
             </Typography>
+
             <TextField
                 value={data?.title}
                 onChange={onChangeTitleHandler}
                 fullWidth
-                label="Название"
-                id="name"
-                size="small"
+                label='Название'
+                id='name'
+                size='small'
                 sx={{ mt: 2 }}
                 required
             />
+
             <TextField
                 value={data?.content}
                 onChange={onChangeContentHandler}
                 multiline
                 maxRows={4}
                 fullWidth
-                label="Описание"
-                id="content"
-                size="small"
+                label='Описание'
+                id='content'
+                size='small'
                 sx={{ mt: 2 }}
                 required
             />
+
             <TextField
                 select
-                label="Исполнитель"
-                defaultValue={data?.executor}
+                label='Исполнитель'
+                // defaultValue={data?.executor?.fullName}
+                value={data?.executor?.id}
                 fullWidth
+                name='sdfsdf'
                 sx={{ mt: 2 }}
-                size="small"
+                size='small'
                 onChange={onChangeExecurtorHandler}
             >
                 {participants ? (
                     participants?.map((user) => (
-                        <MenuItem key={user.id} value={user.id}>
+                        <MenuItem
+                            key={user.id}
+                            value={user.id}
+                            
+                        >
                             {user.fullName}
                         </MenuItem>
                     ))
                 ) : (
-                    <MenuItem key={data?.executor} value={data?.executor}>
-                        {data?.executor}
+                    <MenuItem
+                        key={data?.executor?.id}
+                        value={data?.executor?.id}
+                    >
+                        {data?.executor?.fullName}
                     </MenuItem>
                 )}
             </TextField>
+
             <FormControlLabel
                 control={
                     <Checkbox
                         checked={data?.isCompleted}
                         onChange={onChangeIsCompletedHandler}
-                        color="primary"
+                        color='primary'
+                        value={data?.isCompleted}
                     />
                 }
-                label="Выполнена"
+                label='Выполнена'
             />
         </>
     );

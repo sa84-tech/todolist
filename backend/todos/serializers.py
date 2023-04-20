@@ -5,16 +5,24 @@ from accounts.serializers import UserShortSerializer
 from .models import Todolist, Todo
 
 
-class TodoSerializer(ModelSerializer):
-    project = StringRelatedField(read_only=True)
-    executor = SlugRelatedField(
-        read_only=True,
-        slug_field='get_full_name'
+class TodolistParticipientsSerializer(ModelSerializer):
+    participants = UserShortSerializer(
+        many=True
     )
 
     class Meta:
+        model = Todolist
+        fields = ['id', 'participants']
+
+
+class TodoSerializer(ModelSerializer):
+    executor = UserShortSerializer(read_only=True)
+    todolist = TodolistParticipientsSerializer(read_only=True)
+    Todolist
+
+    class Meta:
         model = Todo
-        fields = '__all__'
+        fields = ['id', 'title', 'content', 'is_completed', 'is_active', 'executor', 'todolist']
 
 
 class TodoSerializerBase(ModelSerializer):
@@ -37,7 +45,7 @@ class TodoShortSerializer(ModelSerializer):
 
     class Meta:
         model = Todo
-        fields = ['id', 'title', 'content', 'is_completed', 'executor']
+        fields = ['id', 'title', 'content', 'is_completed', 'is_active',  'executor', 'todolist']
 
 
 class TodolistSerializer(ModelSerializer):
@@ -60,3 +68,6 @@ class TodolistShortSerializer(ModelSerializer):
     class Meta:
         model = Todolist
         fields = '__all__'
+
+
+

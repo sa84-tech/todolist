@@ -71,9 +71,10 @@ export const editableTodosDetailsSlice = createSlice({
             })
             .addCase(updateTodoData.fulfilled, (state, action) => {
                 state.isLoading = false;
-                // todosAdapter.setAll(state, action.payload.results);
-                state.data = action.payload.results;
-                state.form = action.payload.results;
+                state.formState = 'default';
+                state.data = action.payload;
+                state.form = action.payload;
+                todosAdapter.setOne(state, action.payload);
             })
             .addCase(updateTodoData.rejected, (state, action) => {
                 state.isLoading = false;

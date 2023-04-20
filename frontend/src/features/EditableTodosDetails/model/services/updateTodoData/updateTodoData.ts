@@ -5,22 +5,23 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Todo } from '@/entities/Todo';
 import { getTodosDetailsForm } from '../../selectors/editableTodoCardSelectors';
 
-interface ApiResponse {
-    count: number | null;
-    next: string | null;
-    previous: string | null;
-    results: Todo;
-}
-
-export const updateTodoData = createAsyncThunk<ApiResponse, void, ThunkConfig<string>>(
+export const updateTodoData = createAsyncThunk<Todo, void, ThunkConfig<string>>(
     'editableTodoCard/updateTodoData',
     async (_, thunkApi) => {
         const { rejectWithValue, getState } = thunkApi;
 
         const formData = getTodosDetailsForm(getState());
 
+        const requestData = {
+            id: formData?.id,
+            title: formData?.title,
+            content: formData?.content,
+            todolist: formData?.todolist?.id,
+            executor: formData?.executor?.id,
+        }
+
         try {
-            const response = await $api.put<ApiResponse>(`/todos/todo/${formData?.id}`, formData);
+            const response = await $api.put<Todo>(`/todos/todo/${formData?.id}/`, requestData);
 
             if (!response.data) {
                 throw new Error();
