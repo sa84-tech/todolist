@@ -1,18 +1,13 @@
+import { TodoFormData } from '@/features/EditableTodosDetails/model/types/editableTodosDetailsSchema';
 import { CircularProgress, Grid, Typography } from '@mui/material';
 import { memo } from 'react';
-import { Todo } from '../../model/types/TodoSchema';
 
 interface TodoCardProps {
     className?: string;
-    data?: Todo;
+    data?: TodoFormData;
     readonly?: boolean;
     isLoading?: boolean;
     error?: string;
-    onChangeTitle?: (value?: string) => void;
-    onChangeContent?: (value?: string) => void;
-    onChangeExecurtor?: (value?: string) => void;
-    onChangeIsCompleted?: (value?: boolean) => void;
-    onChangeIsActive?: (value?: boolean) => void;
 }
 
 export const TodoCard = memo((props: TodoCardProps) => {
@@ -21,11 +16,6 @@ export const TodoCard = memo((props: TodoCardProps) => {
         data,
         isLoading,
         error,
-        onChangeTitle,
-        onChangeContent,
-        onChangeExecurtor,
-        onChangeIsCompleted,
-        onChangeIsActive,
     } = props;
 
     if (isLoading) {

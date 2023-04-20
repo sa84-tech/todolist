@@ -1,12 +1,14 @@
 import { Todos } from '@/entities/Todo';
 import { TodoCard } from '@/entities/Todo/ui/TodoCard/TodoCard';
+import { TodoForm } from '@/entities/Todo/ui/TodoForm/TodoForm';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 import { FormControlLabel, Grid, Switch, Typography } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
     getTodosDetailsForm,
     getTodosDetailsIsLoading,
+    getTodosDetailsformState,
 } from '../../model/selectors/editableTodoCardSelectors';
 import { fetchTodoData } from '../../model/services/fetchTodoData/fetchTodoData';
 import {
@@ -29,6 +31,8 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
     const formData = useSelector(getTodosDetailsForm);
     const [checked, setChecked] = useState(true);
 
+    const formState = useSelector(getTodosDetailsformState);
+
     if (!id) {
         return (
             <Grid
@@ -43,19 +47,58 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
         );
     }
 
-    const todoSwitchHandler = (id: number) => {
-        dispatch(editableTodosDetailsActions.switchTodo(id));
-    };
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setChecked(event.target.checked);
-    };
-
     useEffect(() => {
         dispatch(fetchTodoData(id));
     }, [dispatch, id]);
 
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
+    useEffect(() => {
+        if (formState === 'create') {
+            dispatch(
+                editableTodosDetailsActions.updateTodo({
+                    title: '',
+                    content: '',
+                    // executor: '',
+                    isCompleted: false,
+                }),
+            );
+        }
+    }, [dispatch, formState]);
+
+    const todoDisplayHandler = useCallback(
+        (id: number) => {
+            dispatch(editableTodosDetailsActions.displayTodo(id));
+        },
+        [dispatch],
+    );
+
+    const switchChangeHandler = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            setChecked(event.target.checked);
+        },
+        [dispatch],
+    );
+
+    // Form fields
+    const onChangeTitle = useCallback(
+        (value?: string) => {
+            dispatch(editableTodosDetailsActions.updateTodo({ title: value || '' }));
+        },
+        [dispatch],
+    );
+
+    const onChangeContent = useCallback(
+        (value?: string) => {
+            dispatch(editableTodosDetailsActions.updateTodo({ content: value || '' }));
+        },
+        [dispatch],
+    );
+
+    const onChangeIsCompleted = useCallback(
+        (value?: boolean) => {
+            dispatch(editableTodosDetailsActions.updateTodo({ isCompleted: value || false }));
+        },
+        [dispatch],
+    );
 
     return (
         <Grid
@@ -69,14 +112,13 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
                     <FormControlLabel
                         control={
                             <Switch
-                                {...label}
                                 sx={{ mr: 2 }}
                                 checked={checked}
-                                onChange={handleChange}
+                                onChange={switchChangeHandler}
                             />
                         }
                         label="Скрывать удаленные"
-                        labelPlacement='start'
+                        labelPlacement="start"
                     />
                 </Grid>
 
@@ -84,13 +126,25 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
                     isLoading={isLoading}
                     todos={todos}
                     todolistId={todos[0]?.todolistId}
-                    onItemClickHandle={todoSwitchHandler}
+                    onItemClickHandle={todoDisplayHandler}
                     hideDeleted={checked}
                 />
             </Grid>
             <Grid item xs={12} mt={2} md={5} pl={3}>
-                <TodoCard isLoading={isLoading} data={formData} />
-                <EditableTodoCardControls />
+                {formState === 'default' ? (
+                    <TodoCard isLoading={isLoading} data={formData} />
+                ) : (
+                    <TodoForm
+                        isLoading={isLoading}
+                        data={formData}
+                        onChangeTitle={onChangeTitle}
+                        onChangeContent={onChangeContent}
+                        onChangeIsCompleted={onChangeIsCompleted}
+                    />
+                )}
+                <EditableTodoCardControls
+                    formState={formState}
+                />
             </Grid>
         </Grid>
     );

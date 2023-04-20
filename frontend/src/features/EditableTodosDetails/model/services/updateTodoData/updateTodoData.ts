@@ -2,33 +2,34 @@ import { ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
 import { Todolist } from '@/entities/Todolist';
 import { $api } from '@/shared/api/api';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getTodolistForm } from '../../selectors/editableTodolistCardSelectors';
+import { Todo } from '@/entities/Todo';
+import { getTodosDetailsForm } from '../../selectors/editableTodoCardSelectors';
 
-export const updateTodolistData = createAsyncThunk<
-    Todolist,
-    void,
-    ThunkConfig<string>
-    >(
-        'editableTodolistCard/updateTodolistData',
-        async (_, thunkApi) => {
-            const { rejectWithValue, getState } = thunkApi;
+interface ApiResponse {
+    count: number | null;
+    next: string | null;
+    previous: string | null;
+    results: Todo;
+}
 
-            const formData = getTodolistForm(getState());
+export const updateTodoData = createAsyncThunk<ApiResponse, void, ThunkConfig<string>>(
+    'editableTodoCard/updateTodoData',
+    async (_, thunkApi) => {
+        const { rejectWithValue, getState } = thunkApi;
 
-            try {
-                const response = await $api.put<Todolist>(
-                    `/todos/toodlist/${formData?.id}`,
-                    formData,
-                );
+        const formData = getTodosDetailsForm(getState());
 
-                if (!response.data) {
-                    throw new Error();
-                }
+        try {
+            const response = await $api.put<ApiResponse>(`/todos/todo/${formData?.id}`, formData);
 
-                return response.data;
-            } catch (e) {
-                console.log(e);
-                return rejectWithValue('error');
+            if (!response.data) {
+                throw new Error();
             }
-        },
-    );
+
+            return response.data;
+        } catch (e) {
+            console.log(e);
+            return rejectWithValue('error');
+        }
+    },
+);
