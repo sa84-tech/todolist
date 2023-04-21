@@ -5,20 +5,19 @@ from accounts.serializers import UserShortSerializer
 from .models import Todolist, Todo
 
 
-class TodolistParticipientsSerializer(ModelSerializer):
+class TodolistParticipantsSerializer(ModelSerializer):
     participants = UserShortSerializer(
+        read_only=True,
         many=True
     )
 
     class Meta:
         model = Todolist
-        fields = ['id', 'participants']
+        fields = ['id', 'title', 'participants']
 
 
 class TodoSerializer(ModelSerializer):
     executor = UserShortSerializer(read_only=True)
-    todolist = TodolistParticipientsSerializer(read_only=True)
-    Todolist
 
     class Meta:
         model = Todo

@@ -121,7 +121,6 @@ export const TodoForm = memo((props: TodoFormProps) => {
                 // defaultValue={data?.executor?.fullName}
                 value={data?.executor?.id}
                 fullWidth
-                name='sdfsdf'
                 sx={{ mt: 2 }}
                 size='small'
                 onChange={onChangeExecurtorHandler}
@@ -131,7 +130,6 @@ export const TodoForm = memo((props: TodoFormProps) => {
                         <MenuItem
                             key={user.id}
                             value={user.id}
-                            
                         >
                             {user.fullName}
                         </MenuItem>

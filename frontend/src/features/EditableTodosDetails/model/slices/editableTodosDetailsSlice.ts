@@ -51,21 +51,22 @@ export const editableTodosDetailsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchTodoData.pending, (state, action) => {
+            .addCase(fetchTodoData.pending, (state) => {
                 state.error = undefined;
                 state.isLoading = true;
             })
             .addCase(fetchTodoData.fulfilled, (state, action) => {
-                state.isLoading = false;
                 todosAdapter.setAll(state, action.payload.results);
-                state.data = action.payload.results[0];
-                state.form = action.payload.results[0];
+                state.data = action.payload.activeTodo;
+                state.form = action.payload.activeTodo;
+                state.todolist = action.payload.todolist;
+                state.isLoading = false;
             })
             .addCase(fetchTodoData.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             })
-            .addCase(updateTodoData.pending, (state, action) => {
+            .addCase(updateTodoData.pending, (state) => {
                 state.error = undefined;
                 state.isLoading = true;
             })
@@ -80,33 +81,6 @@ export const editableTodosDetailsSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload;
             });
-        // .addCase(fetchTodolistData.pending, (state) => {
-        //     state.error = undefined;
-        //     state.isLoading = true;
-        // })
-        // .addCase(fetchTodolistData.fulfilled, (state, action: PayloadAction<Todolist>) => {
-        //     state.isLoading = false;
-        //     state.data = action.payload;
-        //     state.form = action.payload;
-        // })
-        // .addCase(fetchTodolistData.rejected, (state, action) => {
-        //     state.isLoading = false;
-        //     state.error = action.payload;
-        // })
-        // .addCase(updateTodolistData.pending, (state) => {
-        //     state.error = undefined;
-        //     state.isLoading = true;
-        // })
-        // .addCase(updateTodolistData.fulfilled, (state, action: PayloadAction<Todolist>) => {
-        //     state.isLoading = false;
-        //     state.data = action.payload;
-        //     state.form = action.payload;
-        //     state.readonly = true;
-        // })
-        // .addCase(updateTodolistData.rejected, (state, action) => {
-        //     state.isLoading = false;
-        //     state.error = action.payload;
-        // });
     },
 });
 

@@ -1,9 +1,12 @@
 import { ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
-import { Todolist } from '@/entities/Todolist';
 import { $api } from '@/shared/api/api';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Todo } from '@/entities/Todo';
-import { getTodosDetailsForm } from '../../selectors/editableTodoCardSelectors';
+import { getTodosDetailsForm, getTodosDetailsTodolist } from '../../selectors/editableTodoCardSelectors';
+
+interface ApiResponse extends Omit<Todo, 'executor'> {
+    executor: number
+}
 
 export const updateTodoData = createAsyncThunk<Todo, void, ThunkConfig<string>>(
     'editableTodoCard/updateTodoData',
@@ -12,22 +15,28 @@ export const updateTodoData = createAsyncThunk<Todo, void, ThunkConfig<string>>(
 
         const formData = getTodosDetailsForm(getState());
 
-        const requestData = {
-            id: formData?.id,
+        const requestBody = {
             title: formData?.title,
             content: formData?.content,
-            todolist: formData?.todolist?.id,
+            todolist: formData?.todolist,
             executor: formData?.executor?.id,
+            isCompleted: formData?.isCompleted,
         }
 
         try {
-            const response = await $api.put<Todo>(`/todos/todo/${formData?.id}/`, requestData);
+            const response = await $api.put<ApiResponse>(`/todos/todo/${formData?.id}/`, requestBody);
 
             if (!response.data) {
                 throw new Error();
             }
 
-            return response.data;
+            const todolist = getTodosDetailsTodolist(getState());
+            const executor = response.data.executor;
+            const data = {
+                ...response.data,
+                executor: todolist?.participants?.find(user => user.id === executor)
+            }
+            return data;
         } catch (e) {
             console.log(e);
             return rejectWithValue('error');

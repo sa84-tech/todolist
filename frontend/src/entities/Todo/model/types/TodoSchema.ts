@@ -1,4 +1,3 @@
-import { Todolist } from "@/entities/Todolist";
 import { User } from "@/entities/User";
 
 export interface Todo {
@@ -10,5 +9,5 @@ export interface Todo {
     isCompleted?: boolean;
     createdAt?: string;
     updatedAt?: string;
-    todolist?: Todolist;
+    todolist?: number;
 }

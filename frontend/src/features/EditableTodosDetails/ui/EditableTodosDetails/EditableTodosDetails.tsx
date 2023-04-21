@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import {
     getTodosDetailsForm,
     getTodosDetailsIsLoading,
+    getTodosDetailsTodolist,
     getTodosDetailsformState,
 } from '../../model/selectors/editableTodoCardSelectors';
 import { fetchTodoData } from '../../model/services/fetchTodoData/fetchTodoData';
@@ -29,6 +30,7 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
     const todos = useSelector(getTodos.selectAll);
     const isLoading = useSelector(getTodosDetailsIsLoading);
     const formData = useSelector(getTodosDetailsForm);
+    const todolist = useSelector(getTodosDetailsTodolist);
     const [checked, setChecked] = useState(true);
 
     const formState = useSelector(getTodosDetailsformState);
@@ -37,10 +39,10 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
         return (
             <Grid
                 className={`${cls.EditableTodoCard} ${className}`}
-                justifyContent='space-between'
+                justifyContent="space-between"
                 container={true}
             >
-                <Typography variant='h6' component='h2'>
+                <Typography variant="h6" component="h2">
                     Проект не найден.
                 </Typography>
             </Grid>
@@ -59,7 +61,7 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
                     content: '',
                     // executor: '',
                     isCompleted: false,
-                })
+                }),
             );
         }
     }, [dispatch, formState]);
@@ -68,49 +70,43 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
         (id: number) => {
             dispatch(editableTodosDetailsActions.displayTodo(id));
         },
-        [dispatch]
+        [dispatch],
     );
 
     const switchChangeHandler = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
             setChecked(event.target.checked);
         },
-        [dispatch]
+        [dispatch],
     );
 
     // Form fields
     const onChangeTitle = useCallback(
         (value?: string) => {
-            dispatch(
-                editableTodosDetailsActions.updateTodo({ title: value || '' })
-            );
+            dispatch(editableTodosDetailsActions.updateTodo({ title: value || '' }));
         },
-        [dispatch]
+        [dispatch],
     );
 
     const onChangeContent = useCallback(
         (value?: string) => {
-            dispatch(
-                editableTodosDetailsActions.updateTodo({ content: value || '' })
-            );
+            dispatch(editableTodosDetailsActions.updateTodo({ content: value || '' }));
         },
-        [dispatch]
+        [dispatch],
     );
 
     const onChangeExecutor = useCallback(
         (value?: string) => {
             const userId = Number(value);
-            const participants = formData?.todolist?.participants;
-            const fullName = participants?.find(
-                (user) => user.id == userId
-            )?.fullName;
+            const participants = todolist?.participants;
+            const newExecutor = participants?.find((user) => user.id === userId);
             dispatch(
                 editableTodosDetailsActions.updateTodo({
-                    executor: { id, fullName },
-                })
+                    executor: newExecutor,
+                }),
             );
         },
-        [dispatch]
+        [dispatch, todolist],
     );
 
     const onChangeIsCompleted = useCallback(
@@ -118,21 +114,21 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
             dispatch(
                 editableTodosDetailsActions.updateTodo({
                     isCompleted: !value || false,
-                })
+                }),
             );
         },
-        [dispatch]
+        [dispatch],
     );
 
     return (
         <Grid
             className={`${cls.EditableTodoCard} ${className}`}
-            justifyContent='space-between'
+            justifyContent="space-between"
             container={true}
         >
-            <Grid item xs={12} md={7} sx={{ pr: 3 }} justifyContent='end'>
-                <Grid container justifyContent='space-between'>
-                    <Typography variant='h5'>Список задач</Typography>
+            <Grid item xs={12} md={7} sx={{ pr: 3 }} justifyContent="end">
+                <Grid container justifyContent="space-between">
+                    <Typography variant="h5">Список задач</Typography>
                     <FormControlLabel
                         control={
                             <Switch
@@ -141,15 +137,14 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
                                 onChange={switchChangeHandler}
                             />
                         }
-                        label='Скрывать удаленные'
-                        labelPlacement='start'
+                        label="Скрывать удаленные"
+                        labelPlacement="start"
                     />
                 </Grid>
 
                 <Todos
                     isLoading={isLoading}
                     todos={todos}
-                    todolistId={todos[0]?.todolist?.id}
                     onItemClickHandle={todoDisplayHandler}
                     hideDeleted={checked}
                 />
@@ -161,7 +156,7 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
                     <TodoForm
                         isLoading={isLoading}
                         data={formData}
-                        participants={formData?.todolist?.participants}
+                        participants={todolist?.participants}
                         onChangeTitle={onChangeTitle}
                         onChangeContent={onChangeContent}
                         onChangeExecutor={onChangeExecutor}

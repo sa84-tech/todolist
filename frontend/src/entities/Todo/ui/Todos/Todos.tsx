@@ -9,7 +9,6 @@ interface TodosProps {
     className?: string;
     todos?: Todo[];
     hideDeleted?: boolean;
-    todolistId?: number;
     isLoading?: boolean;
     onItemClickHandle?: (id: number) => void;
 }
@@ -18,7 +17,6 @@ export const Todos = memo((props: TodosProps) => {
     const {
         className,
         todos,
-        todolistId,
         isLoading,
         hideDeleted = true,
         onItemClickHandle,
