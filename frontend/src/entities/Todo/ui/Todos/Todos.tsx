@@ -8,7 +8,8 @@ import cls from './Todos.module.scss';
 interface TodosProps {
     className?: string;
     todos?: Todo[];
-    hideDeleted?: boolean;
+    showDeleted?: boolean;
+    showCompleted?: boolean;
     isLoading?: boolean;
     onItemClickHandle?: (id: number) => void;
 }
@@ -18,12 +19,19 @@ export const Todos = memo((props: TodosProps) => {
         className,
         todos,
         isLoading,
-        hideDeleted = true,
+        showDeleted = false,
+        showCompleted = true,
         onItemClickHandle,
     } = props;
 
-    const filteredTodos = hideDeleted ? todos?.filter((todo) => todo.isActive) : todos;
-    
+    const filterDeletedTodos = showDeleted
+        ? todos
+        : todos?.filter((todo) => todo.isActive);
+
+    const filteredTodos = showCompleted
+        ? filterDeletedTodos
+        : filterDeletedTodos?.filter((todo) => !todo.isCompleted);
+
     if (isLoading) {
         return (
             <Box className={`${cls.Todo} ${className}`}>
@@ -31,13 +39,16 @@ export const Todos = memo((props: TodosProps) => {
             </Box>
         );
     }
-    
+
     return (
         <Box className={`${cls.Todo} ${className}`}>
             {filteredTodos?.length ? (
-                <ShortenTodos todos={filteredTodos} onItemClickHandle={onItemClickHandle} />
+                <ShortenTodos
+                    todos={filteredTodos}
+                    onItemClickHandle={onItemClickHandle}
+                />
             ) : (
-                <Typography variant="body1">Для проекта нет задач.</Typography>
+                <Typography variant='body1'>Задачи отсутсвуют.</Typography>
             )}
         </Box>
     );

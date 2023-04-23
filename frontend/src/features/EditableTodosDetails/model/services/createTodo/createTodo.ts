@@ -8,30 +8,34 @@ import {
 } from '../../selectors/editableTodoCardSelectors';
 import { ApiTodoResponse } from '../../types/editableTodosDetailsSchema';
 
-export const updateTodoData = createAsyncThunk<Todo, void, ThunkConfig<string>>(
-    'editableTodoCard/updateTodoData',
+export const createTodo = createAsyncThunk<Todo, void, ThunkConfig<string>>(
+    'editableTodoCard/createTodo',
     async (_, thunkApi) => {
         const { rejectWithValue, getState } = thunkApi;
 
         const formData = getTodosDetailsForm(getState());
 
         const requestBody = {
-            ...formData,
+            title: formData?.title,
+            content: formData?.content,
+            todolist: formData?.todolist,
             executor: formData?.executor?.id,
+            isCompleted: formData?.isCompleted,
         };
 
         try {
-            const response = await $api.put<ApiTodoResponse>(
-                `/todos/todo/${formData?.id}/`,
+            const response = await $api.post<ApiTodoResponse>(
+                '/todos/todo/',
                 requestBody
             );
 
             if (!response.data) {
                 throw new Error();
             }
-            console.log("🚀 ~ file: updateTodoData.ts:30 ~ response.data:", response.data)
 
+            console.log("🚀 ~ file: createTodo.ts:42 ~ response.data:", response.data)
             return insertUserData(getState(), response.data);
+
         } catch (e) {
             console.log(e);
             return rejectWithValue('error');

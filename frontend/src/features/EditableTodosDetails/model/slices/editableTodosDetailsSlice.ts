@@ -1,17 +1,27 @@
-import { createEntityAdapter, createSlice, DeepPartial, PayloadAction } from '@reduxjs/toolkit';
+import {
+    createEntityAdapter,
+    createSlice,
+    DeepPartial,
+    PayloadAction,
+} from '@reduxjs/toolkit';
 import { Todo } from '@/entities/Todo';
 import { fetchTodoData } from '../services/fetchTodoData/fetchTodoData';
 import { StateSchema } from '@/app/providers/StoreProvider';
-import { EditableTodosDetailsSchema, TodoFormData } from '../types/editableTodosDetailsSchema';
+import {
+    EditableTodosDetailsSchema,
+    TodoFormData,
+} from '../types/editableTodosDetailsSchema';
 import { formStateType } from '@/shared/types';
 import { updateTodoData } from '../services/updateTodoData/updateTodoData';
+import { createTodo } from '../services/createTodo/createTodo';
+import { deleteTodo } from '../services/deleteTodo/deleteTodo';
 
 const todosAdapter = createEntityAdapter<Todo>({
     selectId: (todo) => todo.id,
 });
 
 export const getTodos = todosAdapter.getSelectors<StateSchema>(
-    (state) => state.todosDetails || todosAdapter.getInitialState(),
+    (state) => state.todosDetails || todosAdapter.getInitialState()
 );
 
 const initialState = todosAdapter.getInitialState<EditableTodosDetailsSchema>({
@@ -42,11 +52,11 @@ export const editableTodosDetailsSlice = createSlice({
         },
         displayTodo: (state, action: PayloadAction<number>) => {
             state.form = {
-                ...state.entities[action.payload] as TodoFormData
-            }
+                ...(state.entities[action.payload] as TodoFormData),
+            };
             state.data = {
-                ...state.entities[action.payload] as Todo
-            }
+                ...(state.entities[action.payload] as Todo),
+            };
         },
     },
     extraReducers: (builder) => {
@@ -66,6 +76,21 @@ export const editableTodosDetailsSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload;
             })
+            .addCase(createTodo.pending, (state) => {
+                state.error = undefined;
+                state.isLoading = true;
+            })
+            .addCase(createTodo.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.formState = 'default';
+                state.data = action.payload;
+                state.form = action.payload;
+                todosAdapter.addOne(state, action.payload);
+            })
+            .addCase(createTodo.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
             .addCase(updateTodoData.pending, (state) => {
                 state.error = undefined;
                 state.isLoading = true;
@@ -80,9 +105,26 @@ export const editableTodosDetailsSlice = createSlice({
             .addCase(updateTodoData.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
+            })
+            .addCase(deleteTodo.pending, (state) => {
+                state.error = undefined;
+                state.isLoading = true;
+            })
+            .addCase(deleteTodo.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.formState = 'default';
+                state.data = action.payload;
+                state.form = action.payload;
+                todosAdapter.setOne(state, action.payload);
+            })
+            .addCase(deleteTodo.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
             });
     },
 });
 
-export const { actions: editableTodosDetailsActions } = editableTodosDetailsSlice;
-export const { reducer: editableTodosDetailsReducer } = editableTodosDetailsSlice;
+export const { actions: editableTodosDetailsActions } =
+    editableTodosDetailsSlice;
+export const { reducer: editableTodosDetailsReducer } =
+    editableTodosDetailsSlice;

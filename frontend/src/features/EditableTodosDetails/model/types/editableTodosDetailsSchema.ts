@@ -15,3 +15,13 @@ export interface EditableTodosDetailsSchema extends EntityState<Todo> {
     todolist?: Todolist;
     // participants?: User[];
 }
+
+export interface ApiTodoResponse extends Omit<Todo, 'executor'> {
+    executor: number
+}
+
+export interface ApiTodosListResponse {
+    results: Todo[];
+    todolist: Todolist;
+    activeTodo?: Todo;
+}

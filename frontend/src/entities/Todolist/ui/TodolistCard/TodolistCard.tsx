@@ -40,10 +40,10 @@ export const TodolistCard = memo((props: TodolistCardProps) => {
     if (error) {
         return (
             <>
-                <Typography variant="h2" component="h5" sx={{ mb: 2 }}>
-                    <strong>Произошла ошибка при загрузки данных проекта.</strong>
+                <Typography variant="h4" component="h5" sx={{ mb: 2 }}>
+                    <strong>Произошла ошибка при загрузке данных проекта.</strong>
                 </Typography>
-                <Typography variant="h3" component="h5" sx={{ my: 2 }}>
+                <Typography variant="h5" component="h5" sx={{ my: 2 }}>
                     Попробуйте обновить страницу.
                 </Typography>
             </>

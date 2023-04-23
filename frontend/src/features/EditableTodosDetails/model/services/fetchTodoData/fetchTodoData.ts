@@ -1,40 +1,35 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
 import { $api } from '@/shared/api/api';
-import { Todo } from '@/entities/Todo';
-import { Todolist } from '@/entities/Todolist';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { ApiTodosListResponse } from '../../types/editableTodosDetailsSchema';
 
-interface ApiResponse {
-    results: Todo[];
-    todolist: Todolist;
-    activeTodo?: Todo;
-}
+export const fetchTodoData = createAsyncThunk<
+    ApiTodosListResponse,
+    number,
+    ThunkConfig<string>
+>('editableTodoCard/fetchTodoData', async (todolistId, thunkApi) => {
+    const { rejectWithValue } = thunkApi;
 
-export const fetchTodoData = createAsyncThunk<ApiResponse, number, ThunkConfig<string>>(
-    'editableTodoCard/fetchTodoData',
-    async (todolistId, thunkApi) => {
-        const { rejectWithValue } = thunkApi;
+    try {
+        const response = await $api.get<ApiTodosListResponse>('/todos/todo', {
+            params: {
+                todolist: todolistId,
+            },
+        });
 
-        try {
-            const response = await $api.get<ApiResponse>('/todos/todo', {
-                params: {
-                    todolist: todolistId,
-                }
-            });
-
-            if (!response.data) {
-                throw new Error();
-            }
-
-            const data = {
-                ...response.data,
-                activeTodo: response.data.results.find(item => item.isActive),
-            }
-
-            return data;
-        } catch (e) {
-            console.log(e);
-            return rejectWithValue('error');
+        if (!response.data) {
+            throw new Error();
         }
-    },
-);
+
+        const data = {
+            ...response.data,
+            activeTodo: response.data.results.find((item) => item.isActive),
+        };
+        console.log("🚀 ~ file: fetchTodoData.ts:27 ~ > ~ response.data:", response.data)
+
+        return data;
+    } catch (e) {
+        console.log(e);
+        return rejectWithValue('error');
+    }
+});

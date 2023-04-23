@@ -2,7 +2,7 @@ import { Todos } from '@/entities/Todo';
 import { TodoCard } from '@/entities/Todo/ui/TodoCard/TodoCard';
 import { TodoForm } from '@/entities/Todo/ui/TodoForm/TodoForm';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
-import { FormControlLabel, Grid, Switch, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -12,11 +12,13 @@ import {
     getTodosDetailsformState,
 } from '../../model/selectors/editableTodoCardSelectors';
 import { fetchTodoData } from '../../model/services/fetchTodoData/fetchTodoData';
+import { updateTodoData } from '../../model/services/updateTodoData/updateTodoData';
 import {
     editableTodosDetailsActions,
     getTodos,
 } from '../../model/slices/editableTodosDetailsSlice';
 import { EditableTodoCardControls } from '../EditableTodoCardControls/EditableTodoCardControls';
+import { EditableTodosDetailsHeader } from '../EditableTodosDetailsHeader/EditableTodosDetailsHeader';
 import cls from './EditableTodosDetails.module.scss';
 
 interface EditableTodosDetailsProps {
@@ -31,7 +33,9 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
     const isLoading = useSelector(getTodosDetailsIsLoading);
     const formData = useSelector(getTodosDetailsForm);
     const todolist = useSelector(getTodosDetailsTodolist);
-    const [checked, setChecked] = useState(true);
+
+    const [deletedChecked, setDeletedChecked] = useState(false);
+    const [completedChecked, setCompletedChecked] = useState(true);
 
     const formState = useSelector(getTodosDetailsformState);
 
@@ -39,10 +43,10 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
         return (
             <Grid
                 className={`${cls.EditableTodoCard} ${className}`}
-                justifyContent="space-between"
+                justifyContent='space-between'
                 container={true}
             >
-                <Typography variant="h6" component="h2">
+                <Typography variant='h6' component='h2'>
                     Проект не найден.
                 </Typography>
             </Grid>
@@ -59,9 +63,8 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
                 editableTodosDetailsActions.updateTodo({
                     title: '',
                     content: '',
-                    // executor: '',
                     isCompleted: false,
-                }),
+                })
             );
         }
     }, [dispatch, formState]);
@@ -70,43 +73,42 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
         (id: number) => {
             dispatch(editableTodosDetailsActions.displayTodo(id));
         },
-        [dispatch],
-    );
-
-    const switchChangeHandler = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
-            setChecked(event.target.checked);
-        },
-        [dispatch],
+        [dispatch]
     );
 
     // Form fields
     const onChangeTitle = useCallback(
         (value?: string) => {
-            dispatch(editableTodosDetailsActions.updateTodo({ title: value || '' }));
+            dispatch(
+                editableTodosDetailsActions.updateTodo({ title: value || '' })
+            );
         },
-        [dispatch],
+        [dispatch]
     );
 
     const onChangeContent = useCallback(
         (value?: string) => {
-            dispatch(editableTodosDetailsActions.updateTodo({ content: value || '' }));
+            dispatch(
+                editableTodosDetailsActions.updateTodo({ content: value || '' })
+            );
         },
-        [dispatch],
+        [dispatch]
     );
 
     const onChangeExecutor = useCallback(
         (value?: string) => {
             const userId = Number(value);
             const participants = todolist?.participants;
-            const newExecutor = participants?.find((user) => user.id === userId);
+            const newExecutor = participants?.find(
+                (user) => user.id === userId
+            );
             dispatch(
                 editableTodosDetailsActions.updateTodo({
                     executor: newExecutor,
-                }),
+                })
             );
         },
-        [dispatch, todolist],
+        [dispatch, todolist]
     );
 
     const onChangeIsCompleted = useCallback(
@@ -114,39 +116,41 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
             dispatch(
                 editableTodosDetailsActions.updateTodo({
                     isCompleted: !value || false,
-                }),
+                })
             );
         },
-        [dispatch],
+        [dispatch]
     );
+
+    const onTodoRestore = useCallback(() => {
+        dispatch(
+            editableTodosDetailsActions.updateTodo({
+                isActive: true,
+            })
+        );
+        dispatch(updateTodoData());
+    }, [dispatch]);
 
     return (
         <Grid
             className={`${cls.EditableTodoCard} ${className}`}
-            justifyContent="space-between"
+            justifyContent='space-between'
             container={true}
         >
-            <Grid item xs={12} md={7} sx={{ pr: 3 }} justifyContent="end">
-                <Grid container justifyContent="space-between">
-                    <Typography variant="h5">Список задач</Typography>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                sx={{ mr: 2 }}
-                                checked={checked}
-                                onChange={switchChangeHandler}
-                            />
-                        }
-                        label="Скрывать удаленные"
-                        labelPlacement="start"
-                    />
-                </Grid>
+            <Grid item xs={12} md={7} sx={{ pr: 3 }} justifyContent='end'>
+                <EditableTodosDetailsHeader
+                    deletedChecked={deletedChecked}
+                    completedChecked={completedChecked}
+                    setDeletedChecked={setDeletedChecked}
+                    setCompletedChecked={setCompletedChecked}
+                />
 
                 <Todos
                     isLoading={isLoading}
                     todos={todos}
                     onItemClickHandle={todoDisplayHandler}
-                    hideDeleted={checked}
+                    showDeleted={deletedChecked}
+                    showCompleted={completedChecked}
                 />
             </Grid>
             <Grid item xs={12} mt={2} md={5} pl={3}>
@@ -163,7 +167,11 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
                         onChangeIsCompleted={onChangeIsCompleted}
                     />
                 )}
-                <EditableTodoCardControls formState={formState} />
+                <EditableTodoCardControls
+                    formState={formState}
+                    isTodoActive={formData?.isActive}
+                    onRestore={onTodoRestore}
+                />
             </Grid>
         </Grid>
     );
