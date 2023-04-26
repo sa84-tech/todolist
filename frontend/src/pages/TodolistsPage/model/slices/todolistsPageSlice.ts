@@ -22,7 +22,7 @@ const todolistsPageSlice = createSlice({
         next: '',
         previous: '',
         total: 0,
-        limit: 10,
+        limit: 8,
         offset: 0,
         search: '',
     }),

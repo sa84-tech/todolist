@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { $api } from '@/shared/api/api';
 import { ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
 import { Todolist } from '@/entities/Todolist';
+import { getTodolistsPageLimit, getTodolistsPageOffset } from '../../selectors/todolistsPageSelectors';
 
 interface ApiResponse {
     count: number;
@@ -19,8 +20,9 @@ ApiResponse,
         'todolistsPage/fetchTodolists',
         async (props, thunkApi) => {
             const { rejectWithValue, getState } = thunkApi;
-            const limit = 10;
-            const offset = 0;
+
+            const limit = getTodolistsPageLimit(getState());
+            const offset = getTodolistsPageOffset(getState());
 
             try {
                 const response = await $api.get<ApiResponse>('/todos/todolist', {

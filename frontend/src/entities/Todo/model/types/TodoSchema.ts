@@ -1,4 +1,5 @@
 import { User } from "@/entities/User";
+import { DeepPartial } from "redux";
 
 export interface Todo {
     id: number;
@@ -11,3 +12,5 @@ export interface Todo {
     updatedAt?: string;
     todolist?: number;
 }
+
+export type TodoFormData = DeepPartial<Todo>;

@@ -1,5 +1,6 @@
 import { Todo } from "@/entities/Todo";
 import { User } from "@/entities/User";
+import { DeepPartial } from "redux";
 
 export interface Todolist {
     id: number;
@@ -12,3 +13,5 @@ export interface Todolist {
     participants?: User[]
     todo?: Todo[];
 }
+
+export type TodolistFormData = DeepPartial<Todolist>

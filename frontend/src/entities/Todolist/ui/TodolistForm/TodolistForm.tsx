@@ -9,11 +9,11 @@ import {
     Typography,
 } from '@mui/material';
 import { memo, useCallback } from 'react';
-import { TodoFormData } from '../../model/types/TodoSchema';
+import { TodolistFormData } from '../../model/types/todolist';
 
-interface TodoFormProps {
+interface TodolistFormProps {
     className?: string;
-    data?: TodoFormData;
+    data?: TodolistFormData;
     participants?: User[];
     readonly?: boolean;
     isLoading?: boolean;
@@ -24,7 +24,7 @@ interface TodoFormProps {
     onChangeIsCompleted?: (value?: boolean) => void;
 }
 
-export const TodoForm = memo((props: TodoFormProps) => {
+export const TodolistForm = memo((props: TodolistFormProps) => {
     const {
         className,
         data,
@@ -103,7 +103,7 @@ export const TodoForm = memo((props: TodoFormProps) => {
             />
 
             <TextField
-                value={data?.content}
+                value={data?.details}
                 onChange={onChangeContentHandler}
                 multiline
                 maxRows={4}
@@ -115,7 +115,7 @@ export const TodoForm = memo((props: TodoFormProps) => {
                 required
             />
 
-            <TextField
+            {/* <TextField
                 select
                 label='Исполнитель'
                 // defaultValue={data?.executor?.fullName}
@@ -127,7 +127,10 @@ export const TodoForm = memo((props: TodoFormProps) => {
             >
                 {participants ? (
                     participants?.map((user) => (
-                        <MenuItem key={user.id} value={user.id}>
+                        <MenuItem
+                            key={user.id}
+                            value={user.id}
+                        >
                             {user.fullName}
                         </MenuItem>
                     ))
@@ -139,7 +142,7 @@ export const TodoForm = memo((props: TodoFormProps) => {
                         {data?.executor?.fullName}
                     </MenuItem>
                 )}
-            </TextField>
+            </TextField> */}
 
             <FormControlLabel
                 control={
