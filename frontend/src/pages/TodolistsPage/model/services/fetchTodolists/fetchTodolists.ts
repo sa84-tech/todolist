@@ -24,7 +24,6 @@ ApiResponse,
             const limit = getTodolistsPageLimit(getState());
             const offset = getTodolistsPageOffset(getState());
             const search = getTodolistsPageSearch(getState());
-            console.log("🚀 ~ file: fetchTodolists.ts:26 ~ offset:", offset)
 
             try {
                 const response = await $api.get<ApiResponse>('/todos/todolist', {

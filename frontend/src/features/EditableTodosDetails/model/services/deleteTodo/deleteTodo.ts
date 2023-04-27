@@ -18,7 +18,6 @@ export const deleteTodo = createAsyncThunk<Todo, void, ThunkConfig<string>>(
                 throw new Error();
             }
 
-            console.log("🚀 ~ file: deleteTodo.ts:27 ~ response.data:", response.data)
             return response.data;
 
         } catch (e) {

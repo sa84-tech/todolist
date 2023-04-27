@@ -29,7 +29,6 @@ export const updateTodoData = createAsyncThunk<Todo, void, ThunkConfig<string>>(
             if (!response.data) {
                 throw new Error();
             }
-            console.log("🚀 ~ file: updateTodoData.ts:30 ~ response.data:", response.data)
 
             return insertUserData(getState(), response.data);
         } catch (e) {

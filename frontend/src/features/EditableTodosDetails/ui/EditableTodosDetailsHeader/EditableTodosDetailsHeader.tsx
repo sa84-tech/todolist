@@ -1,16 +1,5 @@
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 import { FormControlLabel, Grid, Switch, Typography } from '@mui/material';
 import { memo, useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import {
-    getTodosDetailsForm,
-    getTodosDetailsIsLoading,
-    getTodosDetailsTodolist,
-    getTodosDetailsformState,
-} from '../../model/selectors/editableTodoCardSelectors';
-import {
-    getTodos
-} from '../../model/slices/editableTodosDetailsSlice';
 
 interface EditableTodosDetailsProps {
     deletedChecked: boolean;
@@ -27,26 +16,19 @@ export const EditableTodosDetailsHeader = memo(
             setDeletedChecked,
             setCompletedChecked,
         } = props;
-        const dispatch = useAppDispatch();
-        const todos = useSelector(getTodos.selectAll);
-        const isLoading = useSelector(getTodosDetailsIsLoading);
-        const formData = useSelector(getTodosDetailsForm);
-        const todolist = useSelector(getTodosDetailsTodolist);
-
-        const formState = useSelector(getTodosDetailsformState);
 
         const switchDeletedHandler = useCallback(
             (event: React.ChangeEvent<HTMLInputElement>) => {
                 setDeletedChecked(event.target.checked);
             },
-            [dispatch]
+            [setDeletedChecked]
         );
 
         const switchCompletedHandler = useCallback(
             (event: React.ChangeEvent<HTMLInputElement>) => {
                 setCompletedChecked(event.target.checked);
             },
-            [dispatch]
+            [setCompletedChecked]
         );
 
         return (

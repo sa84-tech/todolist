@@ -33,7 +33,6 @@ export const createTodo = createAsyncThunk<Todo, void, ThunkConfig<string>>(
                 throw new Error();
             }
 
-            console.log("🚀 ~ file: createTodo.ts:42 ~ response.data:", response.data)
             return insertUserData(getState(), response.data);
 
         } catch (e) {

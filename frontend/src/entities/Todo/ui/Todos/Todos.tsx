@@ -14,6 +14,18 @@ interface TodosProps {
     onItemClickHandle?: (id: number) => void;
 }
 
+const filterTodos = (todos?: Todo[], showDeleted?: boolean, showCompleted?: boolean) => {
+    const filterDeletedTodos = showDeleted
+        ? todos
+        : todos?.filter((todo) => todo.isActive);
+
+    const filteredTodos = showCompleted
+        ? filterDeletedTodos
+        : filterDeletedTodos?.filter((todo) => !todo.isCompleted);
+
+    return filteredTodos;
+};
+
 export const Todos = memo((props: TodosProps) => {
     const {
         className,
@@ -24,14 +36,6 @@ export const Todos = memo((props: TodosProps) => {
         onItemClickHandle,
     } = props;
 
-    const filterDeletedTodos = showDeleted
-        ? todos
-        : todos?.filter((todo) => todo.isActive);
-
-    const filteredTodos = showCompleted
-        ? filterDeletedTodos
-        : filterDeletedTodos?.filter((todo) => !todo.isCompleted);
-
     if (isLoading) {
         return (
             <Box className={`${cls.Todo} ${className}`}>
@@ -39,6 +43,8 @@ export const Todos = memo((props: TodosProps) => {
             </Box>
         );
     }
+
+    const filteredTodos = filterTodos(todos, showDeleted, showCompleted)
 
     return (
         <Box className={`${cls.Todo} ${className}`}>
