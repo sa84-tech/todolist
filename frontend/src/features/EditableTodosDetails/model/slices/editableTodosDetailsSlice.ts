@@ -1,27 +1,20 @@
-import {
-    createEntityAdapter,
-    createSlice,
-    DeepPartial,
-    PayloadAction,
-} from '@reduxjs/toolkit';
-import { Todo } from '@/entities/Todo';
-import { fetchTodoData } from '../services/fetchTodoData/fetchTodoData';
 import { StateSchema } from '@/app/providers/StoreProvider';
-import {
-    EditableTodosDetailsSchema,
-    TodoFormData,
-} from '../types/editableTodosDetailsSchema';
+import { Todo } from '@/entities/Todo';
 import { formStateType } from '@/shared/types';
-import { updateTodoData } from '../services/updateTodoData/updateTodoData';
+import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createTodo } from '../services/createTodo/createTodo';
 import { deleteTodo } from '../services/deleteTodo/deleteTodo';
+import { fetchTodoData } from '../services/fetchTodoData/fetchTodoData';
+import { updateTodoData } from '../services/updateTodoData/updateTodoData';
+import { EditableTodosDetailsSchema } from '../types/editableTodosDetailsSchema';
+import { TodoFormData } from '@/entities/Todo/model/types/TodoSchema';
 
 const todosAdapter = createEntityAdapter<Todo>({
     selectId: (todo) => todo.id,
 });
 
 export const getTodos = todosAdapter.getSelectors<StateSchema>(
-    (state) => state.todosDetails || todosAdapter.getInitialState()
+    (state) => state.todosDetails || todosAdapter.getInitialState(),
 );
 
 const initialState = todosAdapter.getInitialState<EditableTodosDetailsSchema>({
@@ -124,7 +117,5 @@ export const editableTodosDetailsSlice = createSlice({
     },
 });
 
-export const { actions: editableTodosDetailsActions } =
-    editableTodosDetailsSlice;
-export const { reducer: editableTodosDetailsReducer } =
-    editableTodosDetailsSlice;
+export const { actions: editableTodosDetailsActions } = editableTodosDetailsSlice;
+export const { reducer: editableTodosDetailsReducer } = editableTodosDetailsSlice;

@@ -28,10 +28,10 @@ class TodolistViewSet(ModelViewSet):
         return TodolistSerializerBase
 
     def list(self, request):
-        project_name = request.query_params.get('name')
+        title = request.query_params.get('title')
         queryset = self.get_queryset()
-        if project_name is not None:
-            queryset = queryset.filter(name__contains=project_name)
+        if title is not None:
+            queryset = queryset.filter(title__contains=title)
 
         page = self.paginate_queryset(queryset)
         if page is not None:

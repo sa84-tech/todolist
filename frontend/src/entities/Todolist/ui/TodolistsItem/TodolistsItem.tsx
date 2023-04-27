@@ -1,8 +1,9 @@
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig';
 import { AppLink } from '@/shared/ui/AppLink/AppLink';
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
-import { memo } from 'react';
+import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
+import { memo, useCallback } from 'react';
 import { Todolist } from '../../model/types/todolist';
+import { useNavigate } from 'react-router-dom';
 
 interface TodolistsItemProps {
     className?: string;
@@ -14,19 +15,28 @@ export const TodolistsItem = memo((props: TodolistsItemProps) => {
 
     const { title, details, previewImage } = todolist;
 
+    const navigate = useNavigate();
+
+    const onClickHandler = useCallback(() => {
+        navigate(RoutePath.todolist_details + todolist.id);
+    }, [todolist]);
+
     return (
-        <AppLink to={RoutePath.todolist_details + todolist.id}>
-            <Card className={className}>
+        <Card className={className} sx={{ height: '370px' }}>
+            <CardActionArea onClick={onClickHandler}>
                 <CardMedia component="img" height="140" image={previewImage} alt={title} />
-                <CardContent>
+                <CardContent >
                     <Typography gutterBottom variant="h6" component="div">
-                        <strong>Проект:</strong> {title}
+                        {title}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        <strong>Описание:</strong> {details}
+                    <Typography
+                        variant="body2"
+                        color="text.secondary"
+                    >
+                        {details}
                     </Typography>
                 </CardContent>
-            </Card>
-        </AppLink>
+            </CardActionArea>
+        </Card>
     );
 });

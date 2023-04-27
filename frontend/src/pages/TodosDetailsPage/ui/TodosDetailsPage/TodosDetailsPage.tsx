@@ -13,7 +13,6 @@ export const TodosDetailsPage = memo((props: TodosDetailsPageProps) => {
     const { className = '' } = props;
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate()
-
     const onBackClicked = useCallback(() => {
         navigate(RoutePath.todolist_details + id);
     }, [navigate]);

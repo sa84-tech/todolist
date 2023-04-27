@@ -1,38 +1,47 @@
 import { Box, InputBase, Paper } from '@mui/material';
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import cls from './SearchBar.module.scss';
 import { Search as SearchIcon } from '@mui/icons-material';
-import {grey } from '@mui/material/colors';
+import { common } from '@mui/material/colors';
 
 interface SearchBarProps {
     className?: string;
+    search: string;
+    onChangeSearch: (search: string) => void;
 }
 
 export const SearchBar = memo((props: SearchBarProps) => {
-    const { className } = props;
+    const { className, onChangeSearch, search } = props;
+
+    const onChangeHandler = useCallback(
+        (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+            onChangeSearch(event.target.value);
+        },
+        [],
+    );
 
     return (
         <Paper
             className={cls.SearchBar}
-            component='form'
-            variant='outlined'
+            component="form"
+            variant="outlined"
             sx={{
                 p: '2px 4px',
                 display: 'flex',
                 alignItems: 'center',
                 width: 400,
                 maxHeight: '40px',
-                // bgcolor: 'grey.50',
             }}
         >
-            <Box className={cls.iconWrapper} sx={{ mx: 1, alignItems: 'center', color: grey[400] }}>
+            <Box className={cls.iconWrapper} sx={{ display: 'flex', mr: 1, opacity: 0.3 }}>
                 <SearchIcon />
             </Box>
             <InputBase
                 className={cls.input}
-                sx={{ flex: 1 }}
-                placeholder='Поиск…'
+                placeholder="Поиск…"
                 inputProps={{ 'aria-label': 'Поиск' }}
+                onChange={onChangeHandler}
+                value={search}
             />
         </Paper>
     );

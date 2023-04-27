@@ -5,9 +5,9 @@ import { ApiTodosListResponse } from '../../types/editableTodosDetailsSchema';
 
 export const fetchTodoData = createAsyncThunk<
     ApiTodosListResponse,
-    number,
+    { todolistId: number; todoId?: number },
     ThunkConfig<string>
->('editableTodoCard/fetchTodoData', async (todolistId, thunkApi) => {
+>('editableTodoCard/fetchTodoData', async ({ todolistId, todoId }, thunkApi) => {
     const { rejectWithValue } = thunkApi;
 
     try {
@@ -21,11 +21,14 @@ export const fetchTodoData = createAsyncThunk<
             throw new Error();
         }
 
+        const activeTodo = todoId
+            ? response.data.results.find((item) => item.id === todoId)
+            : response.data.results.find((item) => item.isActive);
+
         const data = {
             ...response.data,
-            activeTodo: response.data.results.find((item) => item.isActive),
+            activeTodo,
         };
-        console.log("🚀 ~ file: fetchTodoData.ts:27 ~ > ~ response.data:", response.data)
 
         return data;
     } catch (e) {

@@ -1,8 +1,8 @@
 import { Todo } from '@/entities/Todo';
+import { TodoFormData } from '@/entities/Todo/model/types/TodoSchema';
 import { Todolist } from '@/entities/Todolist';
-import { User } from '@/entities/User';
 import { formStateType } from '@/shared/types';
-import { DeepPartial, EntityState } from '@reduxjs/toolkit';
+import { EntityState } from '@reduxjs/toolkit';
 
 export interface EditableTodosDetailsSchema extends EntityState<Todo> {
     formState: formStateType;

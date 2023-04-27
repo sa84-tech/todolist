@@ -3,7 +3,7 @@ from .models import Todolist, Todo
 
 
 class TodolistFilter(filters.FilterSet):
-    name = filters.CharFilter(lookup_expr='contains')
+    title = filters.CharFilter(lookup_expr='contains')
 
     class Meta:
         model = Todolist

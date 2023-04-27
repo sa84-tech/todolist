@@ -1,9 +1,6 @@
-import { Todos } from '@/entities/Todo';
-import { TodoCard } from '@/entities/Todo/ui/TodoCard/TodoCard';
-import { TodoForm } from '@/entities/Todo/ui/TodoForm/TodoForm';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 import { FormControlLabel, Grid, Switch, Typography } from '@mui/material';
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import {
     getTodosDetailsForm,
@@ -11,13 +8,9 @@ import {
     getTodosDetailsTodolist,
     getTodosDetailsformState,
 } from '../../model/selectors/editableTodoCardSelectors';
-import { fetchTodoData } from '../../model/services/fetchTodoData/fetchTodoData';
 import {
-    editableTodosDetailsActions,
-    getTodos,
+    getTodos
 } from '../../model/slices/editableTodosDetailsSlice';
-import { EditableTodoCardControls } from '../EditableTodoCardControls/EditableTodoCardControls';
-import { updateTodoData } from '../../model/services/updateTodoData/updateTodoData';
 
 interface EditableTodosDetailsProps {
     deletedChecked: boolean;

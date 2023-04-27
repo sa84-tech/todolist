@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { $api } from '@/shared/api/api';
 import { ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
 import { Todolist } from '@/entities/Todolist';
-import { getTodolistsPageLimit, getTodolistsPageOffset } from '../../selectors/todolistsPageSelectors';
+import { getTodolistsPageLimit, getTodolistsPageOffset, getTodolistsPageSearch } from '../../selectors/todolistsPageSelectors';
 
 interface ApiResponse {
     count: number;
@@ -23,12 +23,15 @@ ApiResponse,
 
             const limit = getTodolistsPageLimit(getState());
             const offset = getTodolistsPageOffset(getState());
+            const search = getTodolistsPageSearch(getState());
+            console.log("🚀 ~ file: fetchTodolists.ts:26 ~ offset:", offset)
 
             try {
                 const response = await $api.get<ApiResponse>('/todos/todolist', {
                     params: {
                         limit: limit,
                         offset: offset,
+                        title: search,
                     },
                 });
 

@@ -10,6 +10,8 @@ export const getTodolistsPageLimit = (state: StateSchema) => state.todolistsPage
 
 export const getTodolistsPageTotal = (state: StateSchema) => state.todolistsPage?.total;
 
+export const getTodolistsPageSearch = (state: StateSchema) => state.todolistsPage?.search || '';
+
 export const getTodolistsPageCount = (state: StateSchema) => {
     const limit = state.todolistsPage?.limit;
     const total = state.todolistsPage?.total;

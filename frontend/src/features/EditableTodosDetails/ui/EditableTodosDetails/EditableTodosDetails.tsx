@@ -43,10 +43,10 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
         return (
             <Grid
                 className={`${cls.EditableTodoCard} ${className}`}
-                justifyContent='space-between'
+                justifyContent="space-between"
                 container={true}
             >
-                <Typography variant='h6' component='h2'>
+                <Typography variant="h6" component="h2">
                     Проект не найден.
                 </Typography>
             </Grid>
@@ -54,7 +54,7 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
     }
 
     useEffect(() => {
-        dispatch(fetchTodoData(id));
+        dispatch(fetchTodoData({ todolistId: id }));
     }, [dispatch, id]);
 
     useEffect(() => {
@@ -64,7 +64,7 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
                     title: '',
                     content: '',
                     isCompleted: false,
-                })
+                }),
             );
         }
     }, [dispatch, formState]);
@@ -73,42 +73,36 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
         (id: number) => {
             dispatch(editableTodosDetailsActions.displayTodo(id));
         },
-        [dispatch]
+        [dispatch],
     );
 
     // Form fields
     const onChangeTitle = useCallback(
         (value?: string) => {
-            dispatch(
-                editableTodosDetailsActions.updateTodo({ title: value || '' })
-            );
+            dispatch(editableTodosDetailsActions.updateTodo({ title: value || '' }));
         },
-        [dispatch]
+        [dispatch],
     );
 
     const onChangeContent = useCallback(
         (value?: string) => {
-            dispatch(
-                editableTodosDetailsActions.updateTodo({ content: value || '' })
-            );
+            dispatch(editableTodosDetailsActions.updateTodo({ content: value || '' }));
         },
-        [dispatch]
+        [dispatch],
     );
 
     const onChangeExecutor = useCallback(
         (value?: string) => {
             const userId = Number(value);
             const participants = todolist?.participants;
-            const newExecutor = participants?.find(
-                (user) => user.id === userId
-            );
+            const newExecutor = participants?.find((user) => user.id === userId);
             dispatch(
                 editableTodosDetailsActions.updateTodo({
                     executor: newExecutor,
-                })
+                }),
             );
         },
-        [dispatch, todolist]
+        [dispatch, todolist],
     );
 
     const onChangeIsCompleted = useCallback(
@@ -116,17 +110,17 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
             dispatch(
                 editableTodosDetailsActions.updateTodo({
                     isCompleted: !value || false,
-                })
+                }),
             );
         },
-        [dispatch]
+        [dispatch],
     );
 
     const onTodoRestore = useCallback(() => {
         dispatch(
             editableTodosDetailsActions.updateTodo({
                 isActive: true,
-            })
+            }),
         );
         dispatch(updateTodoData());
     }, [dispatch]);
@@ -134,10 +128,10 @@ export const EditableTodosDetails = memo((props: EditableTodosDetailsProps) => {
     return (
         <Grid
             className={`${cls.EditableTodoCard} ${className}`}
-            justifyContent='space-between'
+            justifyContent="space-between"
             container={true}
         >
-            <Grid item xs={12} md={7} sx={{ pr: 3 }} justifyContent='end'>
+            <Grid item xs={12} md={7} sx={{ pr: 3 }} justifyContent="end">
                 <EditableTodosDetailsHeader
                     deletedChecked={deletedChecked}
                     completedChecked={completedChecked}
