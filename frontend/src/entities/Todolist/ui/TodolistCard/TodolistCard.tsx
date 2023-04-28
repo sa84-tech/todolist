@@ -6,15 +6,9 @@ import { Todolist } from '../../model/types/todolist';
 interface TodolistCardProps {
     className?: string;
     data?: Todolist;
-    readonly?: boolean;
+    formState?: boolean;
     isLoading?: boolean;
     error?: string;
-    onChangeTitle?: (value?: string) => void;
-    onChangeContent?: (value?: string) => void;
-    onChangePreviewImage?: (value?: string) => void;
-    onChangeRecipients?: (value?: string[]) => void;
-    onEditButtonClicked?: () => void;
-    onDeleteButtonClicked?: () => void;
 }
 
 export const TodolistCard = memo((props: TodolistCardProps) => {
@@ -23,10 +17,6 @@ export const TodolistCard = memo((props: TodolistCardProps) => {
         data,
         isLoading,
         error,
-        onChangeTitle,
-        onChangeContent,
-        onChangePreviewImage,
-        onChangeRecipients,
     } = props;
 
     if (isLoading) {
@@ -41,10 +31,10 @@ export const TodolistCard = memo((props: TodolistCardProps) => {
         return (
             <>
                 <Typography variant="h4" component="h5" sx={{ mb: 2 }}>
-                    <strong>Произошла ошибка при загрузке данных проекта.</strong>
+                    <strong>Произошла ошибка при загрузке данных.</strong>
                 </Typography>
                 <Typography variant="h5" component="h5" sx={{ my: 2 }}>
-                    Попробуйте обновить страницу.
+                    Попробуйте обновить страницу
                 </Typography>
             </>
         );
@@ -53,7 +43,7 @@ export const TodolistCard = memo((props: TodolistCardProps) => {
     return (
         <>
             <Typography variant="h4">
-                <strong>Проект:</strong> {data?.title}
+                <strong>Название:</strong> {data?.title}
             </Typography>
             <Typography variant="body1" sx={{ mt: 4 }}>
                 <strong>Описание:</strong> {data?.details}

@@ -22,6 +22,7 @@ interface TodolistFormProps {
     onChangeContent?: (value?: string) => void;
     onChangeExecutor?: (value?: string) => void;
     onChangeIsCompleted?: (value?: boolean) => void;
+    onChangePreviewImage?: (value?: string) => void;
 }
 
 export const TodolistForm = memo((props: TodolistFormProps) => {
@@ -35,6 +36,7 @@ export const TodolistForm = memo((props: TodolistFormProps) => {
         onChangeContent,
         onChangeExecutor,
         onChangeIsCompleted,
+        onChangePreviewImage,
     } = props;
 
     if (isLoading) {

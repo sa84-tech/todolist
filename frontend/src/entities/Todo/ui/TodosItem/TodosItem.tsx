@@ -11,15 +11,15 @@ import {
 import { memo, useCallback } from 'react';
 import { Todo } from '../../model/types/TodoSchema';
 
-interface ShortenTodosItemProps {
+interface TodosItemProps {
     className?: string;
     todo: Todo;
-    activeTodoId: number;
+    selectedItemId: number;
     onClickHandler: (id: number) => void;
 }
 
-export const ShortenTodosItem = memo((props: ShortenTodosItemProps) => {
-    const { className, todo, onClickHandler, activeTodoId } = props;
+export const TodosItem = memo((props: TodosItemProps) => {
+    const { className, todo, onClickHandler, selectedItemId } = props;
 
     const onClick = useCallback(
         (_: any) => {
@@ -32,7 +32,7 @@ export const ShortenTodosItem = memo((props: ShortenTodosItemProps) => {
         <Box className={className}>
             <ListItemButton
                 alignItems='flex-start'
-                selected={todo.id === activeTodoId}
+                selected={todo.id === selectedItemId}
                 onClick={onClick}
             >
                 <ListItemAvatar>

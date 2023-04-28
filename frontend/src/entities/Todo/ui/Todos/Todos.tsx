@@ -1,8 +1,7 @@
-import { AppLink } from '@/shared/ui/AppLink/AppLink';
-import { Box, CircularProgress, Grid, Typography } from '@mui/material';
-import { memo } from 'react';
+import { Box, CircularProgress, List, Typography } from '@mui/material';
+import { memo, useCallback, useState } from 'react';
 import { Todo } from '../../model/types/TodoSchema';
-import { ShortenTodos } from '../ShortenTodos/ShortenTodos';
+import { TodosItem } from '../TodosItem/TodosItem';
 import cls from './Todos.module.scss';
 
 interface TodosProps {
@@ -11,13 +10,12 @@ interface TodosProps {
     showDeleted?: boolean;
     showCompleted?: boolean;
     isLoading?: boolean;
+    selectedTodoId?: number;
     onItemClickHandle?: (id: number) => void;
 }
 
 const filterTodos = (todos?: Todo[], showDeleted?: boolean, showCompleted?: boolean) => {
-    const filterDeletedTodos = showDeleted
-        ? todos
-        : todos?.filter((todo) => todo.isActive);
+    const filterDeletedTodos = showDeleted ? todos : todos?.filter((todo) => todo.isActive);
 
     const filteredTodos = showCompleted
         ? filterDeletedTodos
@@ -34,7 +32,20 @@ export const Todos = memo((props: TodosProps) => {
         showDeleted = false,
         showCompleted = true,
         onItemClickHandle,
+        selectedTodoId = 0,
     } = props;
+
+    const [selected, setSelected] = useState<number>(selectedTodoId);
+
+    const onClickHandler = useCallback(
+        (id: number) => {
+            setSelected(id);
+            onItemClickHandle?.(id);
+        },
+        [onItemClickHandle, setSelected],
+    );
+
+    const filteredTodos = filterTodos(todos, showDeleted, showCompleted);
 
     if (isLoading) {
         return (
@@ -44,17 +55,30 @@ export const Todos = memo((props: TodosProps) => {
         );
     }
 
-    const filteredTodos = filterTodos(todos, showDeleted, showCompleted)
-
     return (
         <Box className={`${cls.Todo} ${className}`}>
             {filteredTodos?.length ? (
-                <ShortenTodos
-                    todos={filteredTodos}
-                    onItemClickHandle={onItemClickHandle}
-                />
+                <List
+                    sx={{
+                        'width': '100%',
+                        'bgcolor': 'background.paper',
+                        'position': 'relative',
+                        'overflow': 'auto',
+                        'maxHeight': 600,
+                        '& ul': { padding: 0 },
+                    }}
+                >
+                    {filteredTodos.map((todo) => (
+                        <TodosItem
+                            todo={todo}
+                            key={todo.id}
+                            onClickHandler={onClickHandler}
+                            selectedItemId={selected}
+                        />
+                    ))}
+                </List>
             ) : (
-                <Typography variant='body1'>Задачи отсутсвуют.</Typography>
+                <Typography variant="body1">Задачи отсутсвуют.</Typography>
             )}
         </Box>
     );

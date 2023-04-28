@@ -3,24 +3,25 @@ import { EditableTodolistCardSchema } from '../types/editableTodolistCardSchema'
 import { Todolist } from '@/entities/Todolist';
 import { fetchTodolistData } from '../services/fetchTodolistData/fetchTodolistData';
 import { updateTodolistData } from '../services/updateTodolistData/updateTodolistData';
+import { formStateType } from '@/shared/types';
 
 const initialState: EditableTodolistCardSchema = {
-    readonly: true,
     isLoading: false,
     error: undefined,
     data: undefined,
+    formState: 'default',
 };
 
 export const editableTodolistCardSlice = createSlice({
     name: 'editableTodolistCard',
     initialState,
     reducers: {
-        setReadonly: (state, action: PayloadAction<boolean>) => {
-            state.readonly = action.payload;
+        setFormState: (state, action: PayloadAction<formStateType>) => {
+            state.formState = action.payload;
         },
         cancelEdit: (state) => {
-            state.readonly = true;
             state.form = state.data;
+            state.formState = 'default';
         },
         updateTodolist: (state, action: PayloadAction<Todolist>) => {
             state.form = {
@@ -52,7 +53,7 @@ export const editableTodolistCardSlice = createSlice({
                 state.isLoading = false;
                 state.data = action.payload;
                 state.form = action.payload;
-                state.readonly = true;
+                state.formState = 'default';
             })
             .addCase(updateTodolistData.rejected, (state, action) => {
                 state.isLoading = false;

@@ -48,7 +48,7 @@ export const TodolistsPage = () => {
             <Grid container flexDirection="column">
                 <Grid container justifyContent="space-between" alignItems="center">
                     <Typography variant="h2" component="h1" sx={{ my: 2 }}>
-                        <strong>Списки задач</strong>
+                        <strong>Списки дел</strong>
                     </Typography>
                     <SearchBar search={search} onChangeSearch={onChangeSearch} />
                 </Grid>

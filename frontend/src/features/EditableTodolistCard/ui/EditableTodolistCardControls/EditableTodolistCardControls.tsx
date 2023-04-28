@@ -3,7 +3,7 @@ import AlertDialog from '@/shared/ui/AlertDialog/AlertDialog';
 import { Button, Grid } from '@mui/material';
 import { memo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { getTodolistReadonly } from '../../model/selectors/editableTodolistCardSelectors';
+import { getTodolistFormState } from '../../model/selectors/editableTodolistCardSelectors';
 import { updateTodolistData } from '../../model/services/updateTodolistData/updateTodolistData';
 import { editableTodolistCardActions } from '../../model/slices/editableTodolistCardSlice';
 
@@ -15,10 +15,10 @@ export const EditableTodolistCardControls = memo((props: EditableTodolistCardCon
     const { className } = props;
 
     const dispatch = useAppDispatch();
-    const readonly = useSelector(getTodolistReadonly);
+    const fromState = useSelector(getTodolistFormState);
 
     const onEdit = useCallback(() => {
-        dispatch(editableTodolistCardActions.setReadonly(false));
+        dispatch(editableTodolistCardActions.setFormState('edit'));
     }, [dispatch]);
 
     const onSave = useCallback(() => {
@@ -29,17 +29,22 @@ export const EditableTodolistCardControls = memo((props: EditableTodolistCardCon
         dispatch(editableTodolistCardActions.cancelEdit());
     }, [dispatch]);
 
+    const onDelete = useCallback(() => {
+        dispatch(editableTodolistCardActions.cancelEdit());
+    }, [dispatch]);
+
     return (
         <Grid container justifyContent="start" sx={{ mt: 3 }}>
-            {readonly ? (
+            {fromState === 'default' ? (
                 <>
                     <Button variant="outlined" onClick={onEdit} size="small" sx={{ m: 1 }}>
                         Редактировать
                     </Button>
                     <AlertDialog
-                        handleAction={onEdit}
+                        handleAction={onCancelEdit}
                         actionName="Удалить"
                         alertMessage="Проект и связанные задачи будут удалены."
+                        
                     />
                 </>
             ) : (

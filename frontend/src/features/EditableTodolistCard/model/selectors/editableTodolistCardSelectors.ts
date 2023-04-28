@@ -4,4 +4,4 @@ export const getTodolistData = (state: StateSchema) => state.todolistDetails?.da
 export const getTodolistError = (state: StateSchema) => state.todolistDetails?.error;
 export const getTodolistForm = (state: StateSchema) => state.todolistDetails?.form;
 export const getTodolistIsLoading = (state: StateSchema) => state.todolistDetails?.isLoading;
-export const getTodolistReadonly = (state: StateSchema) => state.todolistDetails?.readonly;
+export const getTodolistFormState = (state: StateSchema) => state.todolistDetails?.formState;

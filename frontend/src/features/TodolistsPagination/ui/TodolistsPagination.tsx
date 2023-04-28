@@ -1,6 +1,5 @@
-import { memo } from 'react';
-import cls from './TodolistsPagination.module.scss';
 import { Grid, Pagination } from '@mui/material';
+import { memo } from 'react';
 
 interface TodolistsPaginationProps {
     className?: string;
@@ -11,11 +10,11 @@ interface TodolistsPaginationProps {
 export const TodolistsPagination = memo((props: TodolistsPaginationProps) => {
     const { className, onPageChange, pageCount } = props;
 
-    const onChangeHandler = (_: React.ChangeEvent<unknown>, page: number) => {
+    const onChangeHandler = (_: any, page: number) => {
         onPageChange(page);
     };
 
-    if (!pageCount) {
+    if (!pageCount || pageCount < 2) {
         return null;
     }
 

@@ -1,13 +1,12 @@
+import { Todos } from '@/entities/Todo';
+import { EditableTodolistCard } from '@/features/EditableTodolistCard';
+import { getTodolistData } from '@/features/EditableTodolistCard/model/selectors/editableTodolistCardSelectors';
+import { RoutePath } from '@/shared/config/routeConfig/routeConfig';
+import { AppLink } from '@/shared/ui/AppLink/AppLink';
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { memo, useCallback } from 'react';
-import { createSearchParams, useNavigate, useParams } from 'react-router-dom';
-import cls from './TodolistDetailsPage.module.scss';
-import { EditableTodolistCard } from '@/features/EditableTodolistCard';
 import { useSelector } from 'react-redux';
-import { getTodolistData } from '@/features/EditableTodolistCard/model/selectors/editableTodolistCardSelectors';
-import { Todos } from '@/entities/Todo';
-import { AppLink } from '@/shared/ui/AppLink/AppLink';
-import { RoutePath } from '@/shared/config/routeConfig/routeConfig';
+import { createSearchParams, useNavigate, useParams } from 'react-router-dom';
 
 interface TodolistDetailsPageProps {
     className?: string;
@@ -39,7 +38,7 @@ export const TodolistDetailsPage = memo((props: TodolistDetailsPageProps) => {
 
     return (
         <Container
-            className={`${cls.TodolistDetailsPage} ${className}`}
+            className={className}
             maxWidth="xl"
             sx={{ py: 3 }}
         >
@@ -50,7 +49,7 @@ export const TodolistDetailsPage = memo((props: TodolistDetailsPageProps) => {
                     <Grid item xs={12} md={4} sx={{ pl: 3 }}>
                         <Box mb={2}>
                             <Typography variant="h6" component="h2">
-                                Список задач для проекта
+                                Список задач
                             </Typography>
                             {todolist.id && (
                                 <AppLink to={`/todos/${todolist.id}`} color="primary">
