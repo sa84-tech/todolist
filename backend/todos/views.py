@@ -2,9 +2,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
 from .models import Todolist, Todo
-from .serializers import TodolistSerializer, TodoSerializer, TodolistShortSerializer, TodoSerializerBase, \
-    TodolistSerializerBase
+from .serializers import TodoSerializerBase, TodolistSerializer, TodoSerializer, TodolistShortSerializer, \
+    TodolistSerializerBase, TodolistParticipantsSerializer
 from .filters import TodolistFilter, TodoFilter
 
 
@@ -27,10 +28,10 @@ class TodolistViewSet(ModelViewSet):
         return TodolistSerializerBase
 
     def list(self, request):
-        project_name = request.query_params.get('name')
+        title = request.query_params.get('title')
         queryset = self.get_queryset()
-        if project_name is not None:
-            queryset = queryset.filter(name__contains=project_name)
+        if title is not None:
+            queryset = queryset.filter(title__contains=title)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -44,12 +45,28 @@ class TodolistViewSet(ModelViewSet):
 class TodoViewSet(ModelViewSet):
     queryset = Todo.objects.all()
     filterset_class = TodoFilter
-    pagination_class = TodoLimitOffsetPagination
 
     def get_serializer_class(self):
         if self.request.method in ['GET']:
             return TodoSerializer
         return TodoSerializerBase
+
+    def list(self, request):
+        todolist_id = request.query_params.get('todolist')
+        queryset = self.get_queryset()
+
+        if todolist_id is not None:
+            todolist = get_object_or_404(Todolist, id=todolist_id)
+            queryset = queryset.filter(todolist__id=todolist_id)
+            serialized_todolist = TodolistParticipantsSerializer(todolist).data
+
+        serialized_todo = TodoSerializer(queryset, many=True).data
+
+        custom_data = {
+            'todolist': serialized_todolist,
+            'results': serialized_todo,
+        }
+        return Response(custom_data)
 
     def destroy(self, request, pk=None):
         todo = get_object_or_404(Todo, pk=pk)
